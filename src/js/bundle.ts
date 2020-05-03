@@ -14,8 +14,8 @@ root.build(title,
     Research: 'graduation-cap',
     Art: 'palette',
     Interpreting: 'hand-holding-heart',
-    Asperger: 'puzzle-piece',
-    Webshop: 'shopping-bag'
+    Asperger: 'puzzle-piece'
+    //Webshop: 'shopping-bag'
     }
 );
 document.body.appendChild(root);
