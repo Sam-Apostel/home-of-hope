@@ -32,7 +32,6 @@
   "scripts": {
     "start": "webpack-dev-server --open",
     "build": "rm -rf dist && webpack",
-    "prepsurge": "rm -rf surge && mkdir surge && surge dist/",
-    "dist": "rm -rf dist && webpack && cd dist && surge"
+    "dist": "rm -rf dist && webpack && cd dist && git ftp push"
   }
 }

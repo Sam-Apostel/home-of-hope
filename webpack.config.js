@@ -33,7 +33,6 @@ module.exports = {
         new webpack.ProgressPlugin(),
         new CopyPlugin([
             { from: 'src/index.html', to: '.' },
-            { from: 'cname', to: '.' },
             { from: 'src/style.css', to: '.' },
             { from: 'src/fonts', to: './fonts' },
             { from: 'src/images', to: './images' },
