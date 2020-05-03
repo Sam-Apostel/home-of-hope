@@ -1,0 +1,35 @@
+button{
+  width: 100%;
+  padding: 0 0 0 20px;
+  text-align: right;
+  display: block;
+  transition: background-color .3s;
+  border:none;
+  background: none;
+  font-family: Lato, Arial, Verdana, Tahoma, sans-serif;
+  cursor: pointer;
+  margin: 0;
+  line-height: 60px;
+  vertical-align: middle;
+  color: #464246;
+  font-size: 14px;
+}
+button:hover{
+  background-color: rgba(0, 0, 0, 0.12);
+}
+button:active{
+  cursor: grabbing;
+}
+button.selected, button:active{
+  background-color: rgba(0, 0, 0, 0.22);
+  color: white;
+}
+button font-awesome-icon{
+  margin: 0 20px 0 10px;
+  transition: all .3s;
+  display: inline-block;
+}
+
+button:hover font-awesome-icon{
+  margin: 0 10px 0 20px;
+}

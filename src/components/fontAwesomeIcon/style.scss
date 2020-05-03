@@ -1,0 +1,11 @@
+:host{
+  width: 20px;
+  height: 20px;
+  filter: alpha(.7);
+}
+svg path{
+  fill: currentColor;
+}
+svg{
+  transform: translateY(4px);
+}

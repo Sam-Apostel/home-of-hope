@@ -1,0 +1,28 @@
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 400;
+  src: url(Amiri/Amiri-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 700;
+  src: url(Amiri/Amiri-Bold.ttf);
+}
+
+@font-face {
+  font-family: 'Amiri';
+  font-style: italic;
+  font-weight: 400;
+  src: url(Amiri/Amiri-Italic.ttf);
+}
+
+@font-face {
+  font-family: 'Amiri';
+  font-style: italic;
+  font-weight: 700;
+  src: url(Amiri/Amiri-BoldItalic.ttf);
+}
+

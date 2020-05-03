@@ -1,0 +1,78 @@
+*{
+    box-sizing: border-box;
+    font-family: Lato, Arial, Verdana, Tahoma, sans-serif;
+}
+html, body{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color:#FFF;
+}
+.story{
+    border-radius: 30px;
+    height: 60px;
+    width: 100%;
+    line-height: 60px;
+    border:1px solid white;
+    margin: 20px;
+    position: relative;
+}
+.story::before{
+    content: attr(title);
+    position: absolute;
+    left: 30px;
+    top: -10px;
+    background-color: #AEC0B2;
+    line-height: 20px;
+    padding: 0 5px;
+    color: white;
+}
+.story .play{
+    height: 38px;
+    width:38px;
+    background-color: white;
+    color: #AEC0B2;
+    border-radius: 19px;
+    border:none;
+    margin: 0 0 0 11px;
+    line-height: 36px;
+}
+.story .timeline{
+    width: calc(100% - 60px - 40px);
+    margin: 0 0 0 20px;
+}
+.story + .images img{
+    display: inline-block;
+    max-width: calc(33% - 20px);
+    margin: 10px;
+    border-radius: 20px;
+}
+.tile{
+    background-color: white;
+    padding: 10px 20px;
+    display: inline-block;
+    margin: 5px;
+}
+#poems .tile{
+    width: 300px;
+}
+.tile h3, .tile h4{
+    color: #535353;
+    margin: 0;
+    padding: 0;
+}
+#research .tile{
+    display: block;
+}
+
+
+.edit{
+    border: none;
+    background-color: initial;
+    font-size: 2rem;
+}
+
+.editable .tile{
+    -webkit-user-modify: read-write;
+}

@@ -1,0 +1,46 @@
+:host > div {
+  max-width: 120ch;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: justify;
+  color: #535353;
+}
+
+h2, h3{
+  margin: 0;
+  color: rgba(83, 83, 83, 0.44);
+}
+
+
+:host{
+  min-height: 100vh;
+  position: relative;
+  vertical-align: top;
+  width: calc(100vw - 170px);
+  overflow-y: scroll;
+  left: 170px;
+}
+p{
+  font-family: Amiri, "Times New Roman", serif;
+  line-height: 1.5em;
+  font-size: 16px;
+}
+
+blockquote{
+  border-left: 3px solid rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.1);
+  padding: 20px;
+  font-weight: bold;
+  position: relative;
+  margin-left: 0;
+  margin-right: 0;
+}
+blockquote::before{
+  content: '“';
+  position: absolute;
+  margin-left: -9px;
+}
+blockquote::after{
+  content: '”';
+  position: absolute;
+}

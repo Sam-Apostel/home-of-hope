@@ -1,0 +1,36 @@
+nav{
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  background-color: #cacaca;
+  position: fixed;
+  left:0;
+  height: 100vh;
+  float: left;
+  width: 170px;
+  transition: all .3s;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+nav > .header{
+    float:left;
+    color: white;
+    margin:0;
+    padding: 10px 15px;
+    font-size: 2.5em;
+    font-family: Nella Sue;
+}
+
+nav > div{
+  position: absolute;
+  bottom: 0;
+  width: 170px;
+  padding: 1rem;
+  box-sizing: border-box;
+
+  color: #464246;
+}
+nav > div > div{
+  font-size: 10px;
+  text-align: center;
+}
+
+
