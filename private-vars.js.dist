@@ -1,0 +1,8 @@
+const ftp = {
+    hst: 'hostname here',
+    usr: 'username here',
+    pwd: 'password here',
+    prt: 21, //standard port
+    rrt: 'remote root path'
+};
+module.exports = ftp;
