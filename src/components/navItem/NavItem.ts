@@ -14,10 +14,16 @@ export class NavItem extends HTMLElement {
         this.attachShadow({mode: 'open'});
     };
 
-    public build = (id: string, icon: string, contentItem: ContentItem): void => {
-        this.buildTemplate(id, icon);
+    public static makeItem = (contentItem: ContentItem): NavItem => {
+        const navItem = new NavItem();
+        navItem.contentItem = contentItem
+        navItem.build();
+        return navItem;
+    };
+
+    private build = (): void => {
+        this.buildTemplate(this.contentItem.nav.id, this.contentItem.nav.icon);
         this.attachMarkup();
-        this.contentItem = contentItem;
     };
 
     private attachMarkup = (): void => {
@@ -40,6 +46,7 @@ export class NavItem extends HTMLElement {
     public select = (): void => {
         this.classList.add('selected');
         this.contentItem.select();
+        window.history.pushState({}, 'Home of Hope - ' + this.contentItem.nav.id, location.origin + location.pathname + '#' + this.contentItem.nav.id);
     }
 
     attributeChangedCallback(name, oldValue, newValue): void {
