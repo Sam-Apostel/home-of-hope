@@ -9,7 +9,13 @@ export class BookReview extends HTMLElement {
         this.root = this.attachShadow({mode: 'open'});
     };
 
-    public build = (header: Record<string, string>, body: string): void => {
+    public static makeTile = (header: Record<string, string>, body: string): BookReview => {
+        const tile = new BookReview();
+        tile.build(header, body);
+        return tile;
+    };
+
+    private build = (header: Record<string, string>, body: string): void => {
         this.attachMarkup(this.buildTemplate(header, body));
     };
 

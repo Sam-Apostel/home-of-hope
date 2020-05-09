@@ -1,15 +1,17 @@
 import template from './template.html';
 import style from './style.scss';
 import {InstagramFeed} from "../instagramTile/InstagramTile";
+import { NavItem } from '../navItem/NavItem';
 
 export class ContentItem extends HTMLElement {
-    private root: ShadowRoot;
+    private _nav: Record<string, string>;
+    private _root: ShadowRoot;
 
     static get observedAttributes(): Array<string>{
         return ['class'];
     }
 
-    private getAspergerContent = (): HTMLDivElement => {
+    private _getAspergerContent = (): HTMLDivElement => {
         const output = document.createElement('div');
         const title = document.createElement('h3');
         const body = document.createElement('p');
@@ -47,13 +49,13 @@ export class ContentItem extends HTMLElement {
         return output;
     };
 
-    private getPoemsContent = (): HTMLDivElement => {
+    private _getPoemsContent = (): HTMLDivElement => {
         const output = document.createElement('div');
         output.appendChild(InstagramFeed.makeFeed('woord.voor.woord'));
         return output;
     };
 
-    private getArtContent = (): HTMLDivElement => {
+    private _getArtContent = (): HTMLDivElement => {
         const output = document.createElement('div');
         const images = ['94551839_231033338111000_5024844542109548544_n.jpg', '94440204_245019886905126_6073471776774422528_n.jpg'];
         images.forEach(src => {
@@ -66,24 +68,37 @@ export class ContentItem extends HTMLElement {
 
     public constructor() {
         super();
-        this.root = this.attachShadow({mode: 'open'});
+        this._root = this.attachShadow({mode: 'open'});
     };
 
-    public build = (id: string): void => {
+    public static makeItem = (id: string, icon: string): ContentItem => {
+        const contentItem = new ContentItem();
+        contentItem._nav = {icon, id};
+        contentItem._build(id);
+        return contentItem;
+    };
+    get navItem(): NavItem{
+        return NavItem.makeItem(this);
+    }
+    get nav(): Record<string, string>{
+        return this._nav;
+    }
+
+    private _build = (id: string): void => {
         this.buildTemplate(id);
         this.attachMarkup();
         if(id === 'Asperger'){
-            this.addContent(this.getAspergerContent());
+            this.addContent(this._getAspergerContent());
         }else if(id === 'Poems'){
-            this.addContent(this.getPoemsContent());
+            this.addContent(this._getPoemsContent());
         }else if(id === 'Art'){
-            this.addContent(this.getArtContent());
+            this.addContent(this._getArtContent());
         }
     };
 
     private attachMarkup = (): void => {
-        this.root.innerHTML += `<style>${style}</style>`;
-        this.root.innerHTML += `<style class="selectedStyle">
+        this._root.innerHTML += `<style>${style}</style>`;
+        this._root.innerHTML += `<style class="selectedStyle">
                                     :host{
                                         display: none;
                                     }     
@@ -91,11 +106,11 @@ export class ContentItem extends HTMLElement {
     };
 
     private buildTemplate = (id: string): void => {
-        this.root.innerHTML += template.replace("{title}", id);
+        this._root.innerHTML += template.replace("{title}", id);
     };
 
     public addContent = (content): void => {
-        this.root.appendChild(content);
+        this._root.appendChild(content);
     };
 
     public deselect = (): void => {
@@ -108,11 +123,11 @@ export class ContentItem extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue): void {
         if(newValue === 'selected') {
-            this.root.querySelector('.selectedStyle').textContent = `:host{
+            this._root.querySelector('.selectedStyle').textContent = `:host{
                                                                                 display:block;
                                                                               }`
         }else if(oldValue === 'selected'){
-            this.root.querySelector('.selectedStyle').textContent = `:host{
+            this._root.querySelector('.selectedStyle').textContent = `:host{
                                                                                 display: none;
                                                                               }`
         }

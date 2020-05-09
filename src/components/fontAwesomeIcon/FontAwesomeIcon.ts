@@ -29,6 +29,12 @@ export class FontAwesomeIcon extends HTMLElement {
             this.shadowRoot.innerHTML += shoppingBag;
     }
 
+    public static makeIcon = (type: string): FontAwesomeIcon => {
+        const icon = new FontAwesomeIcon();
+        icon[type] = true;
+        return icon;
+    };
+
     set home(value) {
         if (Boolean(value))
             this.setAttribute('home', '');

@@ -3,31 +3,37 @@ import {ContentItem} from "../contentItem/ContentItem";
 import {NavItem} from "../navItem/NavItem";
 
 export class TabView extends HTMLElement {
-    private root: ShadowRoot;
+    private _root: ShadowRoot;
     private navItems: Record<string, NavItem> = {};
     private contentItems: Record<string, ContentItem> = {};
     private header: HTMLElement;
 
     public constructor() {
         super();
-        this.attachShadow({mode: 'open'});
+        this._root = this.attachShadow({mode: 'open'});
 
     };
 
-    public build = (header: HTMLElement, items: Record<string, string>): void => {
+    public static makeView = (header: HTMLElement, items: Array<Record<string, string>>): TabView => {
+        const view = new TabView();
+        view.build(header, items);
+        return view;
+    };
+
+    private build = (header: HTMLElement, items: Array<Record<string, string>>): void => {
         this.header = header;
-        Object.keys(items).forEach(key => {
-            const contentItem = new ContentItem();
-            const navItem = new NavItem();
-            navItem.build(key, items[key], contentItem);
-            contentItem.build(key);
-            this.navItems[key] = navItem;
-            this.contentItems[key] = contentItem;
+        items.forEach(item => {
+            this.contentItems[item.id] = ContentItem.makeItem(item.id, item.icon);
+            this.navItems[item.id] = this.contentItems[item.id].navItem;
         });
         this.buildNav();
         this.buildContent();
         this.attachMarkup();
-
+        if(location.hash.substr(1) !== ''){
+            this.navItems[location.hash.substr(1)].select();
+        }else {
+            this.navItems[items[0].id].select();
+        }
     };
 
     private buildNav = (): void => {
@@ -45,17 +51,17 @@ export class TabView extends HTMLElement {
         const navFooter = document.createElement('div');
         navFooter.innerHTML = '<div>© Kim-Sophie Chaidron 2020</div>';
         nav.appendChild(navFooter);
-        this.shadowRoot.appendChild(nav);
+        this._root.appendChild(nav);
     };
 
     private buildContent = (): void => {
-        Object.values(this.contentItems).forEach((contentItem: ContentItem) => this.shadowRoot.appendChild(contentItem));
+        Object.values(this.contentItems).forEach((contentItem: ContentItem) => this._root.appendChild(contentItem));
     };
 
     private attachMarkup = (): void => {
         const styleElement = document.createElement('style');
         styleElement.innerHTML = style;
-        this.shadowRoot.appendChild(styleElement)
+        this._root.appendChild(styleElement)
     };
 
     public deselect = (): void => {
