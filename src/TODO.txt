@@ -2,3 +2,4 @@ TODO: kentico content
 TODO: scaling update on browser resize
 TODO: introductie
 TODO: responsiveness
+TODO: webshop

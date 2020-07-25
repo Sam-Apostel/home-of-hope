@@ -1,13 +1,13 @@
 {
   "name": "home_of_hope",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Sam Apostel <sam@apostel.be>",
   "description": "Kim-Sophie's personal blog",
   "repository": "repo.tigrr.be/homeofhope",
   "license": "MIT",
   "dependencies": {
-    "@webcomponents/webcomponentsjs": "^2.4.3",
-    "autoprefixer": "^9.7.6",
+    "@webcomponents/webcomponentsjs": "^2.4.4",
+    "autoprefixer": "^9.8.5",
     "core-js": "^3.6.5"
   },
   "scripts": {
@@ -17,24 +17,24 @@
     "deploy": "node deploy"
   },
   "devDependencies": {
-    "ftp-deploy": "^2.3.7",
-    "webpack-dev-server": "^3.8.0",
-    "css-loader": "^3.5.3",
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@typescript-eslint/eslint-plugin": "^2.31.0",
+    "@typescript-eslint/parser": "^2.31.0",
+    "babel-loader": "^8.1.0",
+    "copy-webpack-plugin": "^5.0.4",
+    "css-loader": "^3.6.0",
     "eslint": "^6.3.0",
     "eslint-loader": "^3.0.4",
+    "ftp-deploy": "^2.3.7",
     "html-loader": "^0.5.5",
     "node-sass": "^4.14.1",
     "postcss-loader": "^3.0.0",
     "sass-loader": "^8.0.0",
     "ts-loader": "^6.2.2",
-    "typescript": "^3.6.2",
-    "webpack": "^4.43.0",
-    "copy-webpack-plugin": "^5.0.4",
-    "@typescript-eslint/eslint-plugin": "^2.31.0",
-    "@typescript-eslint/parser": "^2.31.0",
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
-    "babel-loader": "^8.1.0",
-    "webpack-cli": "^3.3.7"
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }

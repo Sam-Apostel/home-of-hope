@@ -1,7 +1,6 @@
-import template from './template.html';
 import style from './style.scss';
-import {InstagramFeed} from "../instagramTile/InstagramTile";
-import { NavItem } from '../navItem/NavItem';
+import {
+    InstagramFeed, NavItem, ShopTile} from './../components';
 
 export class ContentItem extends HTMLElement {
     private _nav: Record<string, string>;
@@ -10,6 +9,17 @@ export class ContentItem extends HTMLElement {
     static get observedAttributes(): Array<string>{
         return ['class'];
     }
+
+    private _getHomeContent = (): HTMLDivElement => {
+      const output = document.createElement('div');
+      const paragraph = document.createElement('p');
+      const title = document.createElement('h2');
+      title.innerText = `Hoopvol thuiskomen`;
+      paragraph.innerText = `Home of Hope. Een plaats waar je uitgenodigd wordt om thuis te komen. Dat in een dromerige sfeer vol met hoop. Een plaats waar ik mijn verhaal vertel en jou uitnodig om mee te komen op mijn reis.  Mijn verhaal in woorden, gedichten en schilderingen. Vertel jij jouw verhaal aan mij?`;
+      output.appendChild(title);
+      output.appendChild(paragraph);
+      return output;
+    };
 
     private _getAspergerContent = (): HTMLDivElement => {
         const output = document.createElement('div');
@@ -66,6 +76,65 @@ export class ContentItem extends HTMLElement {
         return output;
     };
 
+    private _getShopContent = (): ShopTile => {
+        const source = {
+            categories: [
+                {
+                    name: 'Wenskaarten',
+                    id: 0,
+                    description: '',
+                    items: [
+                        {
+                            id: 0,
+                            name: 'Dankbaar',
+                            images: ['images/shop/IMG_5269.png'],
+                            price: 3.00,
+                            description: ''
+                        },{
+                            id: 1,
+                            name: 'Van jou',
+                            images: ['images/shop/IMG_5272.png'],
+                            price: 3.00,
+                            description: ''
+                        },{
+                            id: 2,
+                            name: 'Thuis',
+                            images: ['images/shop/IMG_5275.png'],
+                            price: 3.00,
+                            description: ''
+                        },{
+                            id: 3,
+                            name: 'Wolf',
+                            images: ['images/shop/IMG_5278.png'],
+                            price: 3.00,
+                            description: ''
+                        },{
+                            id: 4,
+                            name: 'Honing & vanille',
+                            images: ['images/shop/IMG_5281.png'],
+                            price: 3.00,
+                            description: ''
+                        }
+                    ]
+                },{
+                    name: 'Boeken',
+                    id: 1,
+                    description: '',
+                    items: [
+                        {
+                            id: 0,
+                            name: 'Puzzle Pieces',
+                            images: ['images/shop/IMG_5598.JPG'],
+                            price: 20.00,
+                            description: ''
+                        }
+                    ]
+                }
+            ]
+        };
+        return ShopTile.MakeTile(source);
+    }
+
     public constructor() {
         super();
         this._root = this.attachShadow({mode: 'open'});
@@ -85,7 +154,6 @@ export class ContentItem extends HTMLElement {
     }
 
     private _build = (id: string): void => {
-        this.buildTemplate(id);
         this.attachMarkup();
         if(id === 'Asperger'){
             this.addContent(this._getAspergerContent());
@@ -93,6 +161,10 @@ export class ContentItem extends HTMLElement {
             this.addContent(this._getPoemsContent());
         }else if(id === 'Art'){
             this.addContent(this._getArtContent());
+        }else if(id === 'Webshop' ){
+            this.addContent(this._getShopContent());
+        }else if(id === 'Home'){
+            this.addContent(this._getHomeContent());
         }
     };
 
@@ -103,10 +175,6 @@ export class ContentItem extends HTMLElement {
                                         display: none;
                                     }     
                                 </style>`;
-    };
-
-    private buildTemplate = (id: string): void => {
-        this._root.innerHTML += template.replace("{title}", id);
     };
 
     public addContent = (content): void => {
@@ -129,7 +197,7 @@ export class ContentItem extends HTMLElement {
         }else if(oldValue === 'selected'){
             this._root.querySelector('.selectedStyle').textContent = `:host{
                                                                                 display: none;
-                                                                              }`
+                                                                             }`
         }
     }
 

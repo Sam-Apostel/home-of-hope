@@ -11,7 +11,6 @@ export class TabView extends HTMLElement {
     public constructor() {
         super();
         this._root = this.attachShadow({mode: 'open'});
-
     };
 
     public static makeView = (header: HTMLElement, items: Array<Record<string, string>>): TabView => {
@@ -29,8 +28,12 @@ export class TabView extends HTMLElement {
         this.buildNav();
         this.buildContent();
         this.attachMarkup();
-        if(location.hash.substr(1) !== ''){
-            this.navItems[location.hash.substr(1)].select();
+
+        const urlAttr = location.hash.substr(1);
+        if(urlAttr !== ''){
+            const urlSections = urlAttr.split('?');
+            this.navItems[urlSections[0]].select(urlSections[1]);
+
         }else {
             this.navItems[items[0].id].select();
         }
