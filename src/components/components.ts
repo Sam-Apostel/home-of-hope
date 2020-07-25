@@ -4,6 +4,8 @@ import {PoemTile} from './poemTile/PoemTile';
 import {NavItem} from './navItem/NavItem';
 import {TabView} from './tabView/TabView';
 import {FontAwesomeIcon} from "./fontAwesomeIcon/FontAwesomeIcon";
+import {ShopTile} from './shopTile/ShopTile';
+import {InstagramFeed} from "./instagramTile/InstagramTile";
 
 export default {
     ContentItem,
@@ -11,7 +13,9 @@ export default {
     PoemTile,
     NavItem,
     TabView,
-    FontAwesomeIcon
+    FontAwesomeIcon,
+    ShopTile,
+    InstagramFeed
 };
 
 export {
@@ -20,5 +24,7 @@ export {
     PoemTile,
     NavItem,
     TabView,
-    FontAwesomeIcon
+    FontAwesomeIcon,
+    ShopTile,
+    InstagramFeed
 };

@@ -1,0 +1,13 @@
+:host{
+	display: inline-flex;
+	flex-direction: row;
+	align-content: center;
+
+	.amount{
+		width: 20px;
+	}
+
+	.image{
+		height: 30px;
+	}
+}

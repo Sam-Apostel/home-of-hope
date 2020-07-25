@@ -43,10 +43,12 @@ export class NavItem extends HTMLElement {
         this.contentItem.deselect();
     }
 
-    public select = (): void => {
+    public select = (getAttr: string | undefined = ''): void => {
         this.classList.add('selected');
         this.contentItem.select();
-        window.history.pushState({}, 'Home of Hope - ' + this.contentItem.nav.id, location.origin + location.pathname + '#' + this.contentItem.nav.id);
+        
+        const pathEnd = getAttr !== '' ? '?' + getAttr : '';
+        window.history.pushState({}, 'Home of Hope - ' + this.contentItem.nav.id, location.origin + location.pathname + '#' + this.contentItem.nav.id + pathEnd);
     }
 
     attributeChangedCallback(name, oldValue, newValue): void {

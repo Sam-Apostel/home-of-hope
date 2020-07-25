@@ -1,0 +1,12 @@
+*{
+  font-family: amiri, serif
+}
+:host{
+  width: 300px;
+  min-height: 30px;
+  background: antiquewhite;
+}
+.items{
+  display: flex;
+  flex-direction: column;
+}
