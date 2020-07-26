@@ -1,21 +1,32 @@
-export const develop = (type: string, className: string, content: Array<HTMLElement>|HTMLElement|string|number = [], attr: Record<string, string> = {}): HTMLElement => {
+export const develop = (type: string, classNames: string, content: Array<HTMLElement|string|number>|HTMLElement|string|number = [], attr: Record<string, string> = {}): HTMLElement => {
 	const elem = document.createElement(type);
-	elem.classList.add(className);
+	classNames.split(' ').filter(className => className !== '').forEach(className => elem.classList.add(className));
 
-	if (Array.isArray(content)){
-		content.forEach(c => elem.appendChild(c));
-	}else if (typeof content === 'string'){
-		elem.innerText = content;
-	}else if (typeof content === 'number'){
-		elem.innerText = content.toString();
-	}else{
-		elem.appendChild(content);
+	const addChild = (child): void => {
+		if (Array.isArray(child)){
+			child.forEach(c => {
+				addChild(c);
+			});
+		}else if (typeof child === 'string'){
+			elem.innerText = child;
+		}else if (typeof child === 'number'){
+			elem.innerText = child.toString();
+		}else{
+			elem.appendChild(child);
+		}
 	}
+
+	addChild(content);
 
 	Object.keys(attr).forEach(key => elem.setAttribute(key, attr[key]));
 
 	return elem;
 };
+
+export const formElement = (type: string, name: string, classNames: string, label= '', autocomplete = '', placeholder = ''): HTMLElement => {
+	const input = develop('input', classNames, [], {type, name, placeholder, autocomplete});
+	return develop('label', '', [label, input], {for: name});
+}
 
 export const initObjectIterators = (): void => {
 
@@ -64,5 +75,6 @@ export const initObjectIterators = (): void => {
 
 export default {
 	develop,
-	initObjectIterators
+	initObjectIterators,
+	formElement
 };

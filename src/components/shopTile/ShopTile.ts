@@ -31,7 +31,7 @@ export class ShopTile extends HTMLElement{
                     tile.cart.add({category: category.id, item: item.id}, 1);
                 })
             );
-            const itemContainer = develop('div', 'itemContainer', items);
+            const itemContainer = develop('div', `itemContainer ${category.name}`, items);
             const title = develop('h2', 'categoryTitle', category.name);
             const description = develop('p', 'categoryDescription', category.description);
             return develop('div', 'category', [title, description, itemContainer]);

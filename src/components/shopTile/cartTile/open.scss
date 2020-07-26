@@ -1,0 +1,26 @@
+:host {
+	width: 300px;
+}
+cart-item-tile + cart-item-tile {
+	margin-top: 7.5px;
+}
+.checkout{
+	box-sizing: border-box;
+	width: 100%;
+	height: 30px;
+	margin-top: 7.5px;
+	border-radius: 5px;
+	border: none;
+	background: darkkhaki;
+	font-size: 1rem;
+	color: white;
+	&:hover{
+		background: #a7a15f;
+	}
+	&:active{
+		background: #999457;
+	}
+	&:disabled{
+		background: #cacaca;
+	}
+}

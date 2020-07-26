@@ -1,13 +1,10 @@
 nav{
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
- /* background: linear-gradient(to top, #20a4b6, #20b1b6);*/
   background-color: #cacaca;
   position: fixed;
   left:0;
-  height: 100vh;
+  height: 100%;
   float: left;
   width: 170px;
-  transition: all .3s;
   padding: 20px 0;
   box-sizing: border-box;
 }

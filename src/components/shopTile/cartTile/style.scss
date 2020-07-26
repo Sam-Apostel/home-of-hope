@@ -1,12 +1,13 @@
 *{
-  font-family: amiri, serif
+	font-family: amiri, serif
 }
 :host{
-  width: 300px;
-  min-height: 30px;
-  background: antiquewhite;
+	background: antiquewhite;
+	border-bottom-left-radius: 10px;
+	padding: 7.5px;
+	display: flex;
+	flex-direction: column;
 }
-.items{
-  display: flex;
-  flex-direction: column;
-}
+
+
+

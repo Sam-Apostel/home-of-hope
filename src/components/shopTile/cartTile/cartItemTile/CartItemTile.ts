@@ -1,6 +1,7 @@
 import style from './style.scss';
 import { develop } from '../../../../utils/developer';
-import {ShopSourceItemInterface} from '../../shopItemTile/ShopItemTile';
+import { ShopSourceItemInterface } from '../../shopItemTile/ShopItemTile';
+import {FontAwesomeIcon} from '../../../components';
 
 export class CartItemTile extends HTMLElement {
 	public constructor() {
@@ -21,9 +22,17 @@ export class CartItemTile extends HTMLElement {
 
 	private amount = 0;
 	private setAmount = (amount: number): void => {
-		this.amount = amount;
+
 		(this.shadowRoot.querySelector('.amount') as HTMLInputElement).value = amount.toString();
-		(this.shadowRoot.querySelector('.totalPrice') as HTMLElement).innerText = `€${this.source.price * amount}`;
+		(this.shadowRoot.querySelector('.totalPrice') as HTMLElement).innerText = `€${(this.source.price * amount).toFixed(2)}`;
+		if(this.amount !== 0 && amount === 0){
+			this.shadowRoot.querySelector('.remove').classList.remove('hidden');
+			this.shadowRoot.querySelector('.subtract').classList.add('hidden');
+		}else if(this.amount === 0 && amount !== 0){
+			this.shadowRoot.querySelector('.remove').classList.add('hidden');
+			this.shadowRoot.querySelector('.subtract').classList.remove('hidden');
+		}
+		this.amount = amount;
 	}
 
 	private buildItem = (): Array<HTMLElement> => {
@@ -32,9 +41,18 @@ export class CartItemTile extends HTMLElement {
 		const nameElem = develop('span', 'name', product.name ?? '');
 		const amountInput = develop('input', 'amount', [], {type: 'text'/* TODO: change this to number for mobile users */, value: this.amount.toString()});
 		const subtractButton = develop('button', 'subtract', '-');
+		const removeButton = develop('button', 'remove', FontAwesomeIcon.makeIcon('trash'));
+		if(this.amount === 0){
+			subtractButton.classList.add('hidden');
+		}else{
+			removeButton.classList.add('hidden');
+		}
 		const addButton = develop('button', 'add', '+');
 
 		subtractButton.addEventListener('click',() => {
+			this.controls.subtract(1);
+		});
+		removeButton.addEventListener('click',() => {
 			this.controls.subtract(1);
 		});
 		addButton.addEventListener('click',() => {
@@ -50,9 +68,9 @@ export class CartItemTile extends HTMLElement {
 				this.controls.set(this.amount);
 			}
 		});
-		const quantityInput = develop('span', 'quantityInput', [subtractButton, amountInput, addButton]);
-		const totalPriceElem = develop('span','totalPrice', `€${product.price * this.amount}`);
-		const priceElem = develop('span','price', `€${product.price}`);
+		const quantityInput = develop('span', 'quantityInput', [subtractButton, removeButton, amountInput, addButton]);
+		const totalPriceElem = develop('span','totalPrice', `€${(product.price * this.amount).toFixed(2)}`);
+		const priceElem = develop('span','price', `€${product.price.toFixed(2)}`);
 		return [imgElem, nameElem, quantityInput, priceElem, totalPriceElem];
 	}
 

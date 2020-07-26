@@ -1,11 +1,17 @@
 :host{
-  width: 20px;
-  height: 20px;
-  filter: alpha(.7);
+  --size: 20px;
+  --opacity: .7;
+  --translate-x: 0px;
+  --translate-y: 4px;
+  width: var(--size);
+  height: var(--size);
+  filter: alpha(var(--opacity));
 }
 svg path{
   fill: currentColor;
 }
 svg{
-  transform: translateY(4px);
+  transform: translate(var(--translate-x), var(--translate-y));
+  width: var(--size);
+  height: var(--size);
 }

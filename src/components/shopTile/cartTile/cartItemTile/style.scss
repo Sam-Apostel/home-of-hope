@@ -1,13 +1,90 @@
 :host{
-	display: inline-flex;
 	flex-direction: row;
 	align-content: center;
+	display: grid;
+	grid-template-columns: 40px 100px 1fr 1.2fr;
+	grid-template-areas:
+		"image name name name"
+		"image amount price total";
+	background: rgba(255,255,255,.5);
+	border-radius: 7px;
+	padding: 10px;
 
-	.amount{
-		width: 20px;
+	* + * {
+		margin-left: 5px;
+	}
+	.name{
+		grid-area: name;
+		font-size: 1.2rem;
+		padding: 0 5px;
+	}
+	.price{
+		grid-area: price;
+	}
+	.totalPrice{
+		grid-area: total;
+	}
+	.quantityInput{
+		grid-area: amount;
+		.amount{
+			width: 25px;
+			height: 25px;
+			text-align: center;
+			border: none;
+			border-radius: 5px;
+			padding: 0;
+			margin-left: 3px
+		}
+
+		button{
+			border-radius: 50%;
+			width: 25px;
+			height: 25px;
+			text-align: center;
+			line-height: 25px;
+			border: none;
+			background: lightblue;
+			color:white;
+			padding: 0;
+			&:hover{
+				background: #89b7c6;
+			}
+			&:active{
+				background: #7ba7b6;
+			}
+			&.add{
+				border-bottom-left-radius: 5px;
+				border-top-left-radius: 5px;
+				margin-left: 3px
+			}
+			&.subtract{
+				border-bottom-right-radius: 5px;
+				border-top-right-radius: 5px;
+			}
+			&.remove{
+				border-bottom-right-radius: 5px;
+				border-top-right-radius: 5px;
+				background: #ef8961;
+				font-awesome-icon{
+					--size: 13px;
+					--opacity: 1;
+					--translate-y: 2px;
+					--translate-x: 1px;
+				}
+				margin-left: 0;
+			}
+			&.hidden{
+				display: none;
+			}
+		}
 	}
 
+
 	.image{
-		height: 30px;
+		height: 60px;
+		width: 40px;
+		border-radius: 5px;
+		object-fit: cover;
+		grid-area: image
 	}
 }

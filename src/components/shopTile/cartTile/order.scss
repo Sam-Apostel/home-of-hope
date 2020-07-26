@@ -1,0 +1,137 @@
+:host {
+	width: calc(100vw - 170px);
+	height: 100%;
+	box-sizing: border-box;
+	display: grid;
+	grid-template-columns: 1fr 300px minmax(370px, 600px) 30px 1fr;
+	grid-template-rows: 30px 1fr 1fr 30px;
+	grid-template-areas:
+		". . . close ."
+		". items shipping shipping ."
+		". items totals totals ."
+		". items pay pay .";
+}
+@media (max-width: 870px) {
+	:host {
+		grid-template-columns: 1fr minmax(auto, 600px) 30px 1fr;
+		grid-template-rows: 30px auto auto auto 30px;
+		grid-template-areas:
+			". . close ."
+			". items items ."
+			". shipping shipping ."
+			". totals totals ."
+			". pay pay .";
+	}
+}
+
+.items{
+	grid-area: items;
+	cart-item-tile{
+		grid-area: items;
+		& + cart-item-tile{
+			margin-top: 7.5px;
+		}
+	}
+}
+
+.shipping{
+	grid-area: shipping;
+	display: grid;
+	grid-template-areas:
+		"name name name"
+		"email email email"
+		"country city postal"
+		"street street street"
+		"message message message";
+	grid-template-columns: 80px 1fr 150px;
+	[for="name"]{
+		grid-area: name;
+	};
+	[for="email"]{
+		grid-area: email;
+	};
+	[for="ship-country"]{
+		grid-area: country;
+	};
+	[for="ship-city"]{
+		grid-area: city;
+	};
+	[for="ship-zip"]{
+		grid-area: postal;
+	};
+	[for="ship-address"]{
+		grid-area: street;
+	};
+	[for="message"]{
+		grid-area: message;
+	}
+	label{
+		margin: 0 5px;
+		line-height: 1.1rem;
+		text-indent: .2rem;
+	}
+	input{
+		box-sizing: border-box;
+		width: 100%;
+		border: none;
+		border-radius: 5px;
+		background: white;
+		line-height: 1.5rem;
+		height: 1.7rem;
+		padding: .1rem .5rem;
+		font-size: 1rem;
+	}
+}
+
+.totals{
+	margin: 5px;
+	grid-area: totals;
+	display: flex;
+	flex-direction: column;
+	.row {
+		padding: 0 5px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		&.total{
+			padding: 2px 5px 0;
+			border: 2px solid #423131;
+			border-radius: 5px;
+		}
+	}
+}
+
+.closeCart{
+	grid-area: close;
+	--button-color: #e37c56;
+	&:hover{
+		--button-color: #ce6f4a;
+	}
+	&:active{
+		--button-color: #b35f40;
+	}
+}
+.pay{
+	grid-area: pay;
+	--button-color: #bdb76b;
+	&:hover{
+		--button-color: #a7a15f;
+	}
+	&:active{
+		--button-color: #999457;
+	}
+}
+button{
+	box-sizing: border-box;
+	width: 100%;
+	height: 30px;
+	border-radius: 5px;
+	border: none;
+	background: var(--button-color);
+	font-size: 1rem;
+	color: white;
+	&:disabled{
+		background: #cacaca;
+	}
+}
+

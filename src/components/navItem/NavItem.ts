@@ -1,6 +1,6 @@
 import template from './template.html';
 import style from './style.scss';
-import {ContentItem} from "../contentItem/ContentItem";
+import { ContentItem } from "../contentItem/ContentItem";
 
 export class NavItem extends HTMLElement {
     private contentItem: ContentItem;
@@ -46,7 +46,7 @@ export class NavItem extends HTMLElement {
     public select = (getAttr: string | undefined = ''): void => {
         this.classList.add('selected');
         this.contentItem.select();
-        
+
         const pathEnd = getAttr !== '' ? '?' + getAttr : '';
         window.history.pushState({}, 'Home of Hope - ' + this.contentItem.nav.id, location.origin + location.pathname + '#' + this.contentItem.nav.id + pathEnd);
     }

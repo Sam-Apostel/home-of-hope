@@ -1,0 +1,20 @@
+:host {
+	width: 30px;
+	height: 30px;
+}
+font-awesome-icon{
+	--size: 30px;
+	--translate-y: 0;
+}
+span{
+	position: absolute;
+	width: 30px;
+	height: 23px;
+	margin-top: 9px;
+	line-height: 23px;
+	text-align: center;
+	color: antiquewhite;
+	font-size: 1rem;
+	font-weight: bold;
+	font-family: Lato, sans-serif;
+}

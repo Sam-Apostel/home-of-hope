@@ -88,31 +88,31 @@ export class ContentItem extends HTMLElement {
                             id: 0,
                             name: 'Dankbaar',
                             images: ['images/shop/IMG_5269.png'],
-                            price: 3.00,
+                            price: 1.40,
                             description: ''
                         },{
                             id: 1,
                             name: 'Van jou',
                             images: ['images/shop/IMG_5272.png'],
-                            price: 3.00,
+                            price: 1.40,
                             description: ''
                         },{
                             id: 2,
                             name: 'Thuis',
                             images: ['images/shop/IMG_5275.png'],
-                            price: 3.00,
+                            price: 1.40,
                             description: ''
                         },{
                             id: 3,
                             name: 'Wolf',
                             images: ['images/shop/IMG_5278.png'],
-                            price: 3.00,
+                            price: 1.40,
                             description: ''
                         },{
                             id: 4,
                             name: 'Honing & vanille',
                             images: ['images/shop/IMG_5281.png'],
-                            price: 3.00,
+                            price: 1.40,
                             description: ''
                         }
                     ]
@@ -124,8 +124,8 @@ export class ContentItem extends HTMLElement {
                         {
                             id: 0,
                             name: 'Puzzle Pieces',
-                            images: ['images/shop/IMG_5598.JPG'],
-                            price: 20.00,
+                            images: ['images/shop/IMG_5604.jpg'],
+                            price: 19.99,
                             description: ''
                         }
                     ]

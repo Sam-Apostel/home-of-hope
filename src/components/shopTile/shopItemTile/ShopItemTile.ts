@@ -20,7 +20,7 @@ export class ShopItemTile extends HTMLElement{
 
 		const title = develop('h3', 'itemTitle', item.name);
 		const image = develop('img', 'itemImage', [], {src: item.images[0], alt: item.name});
-		const price = develop('span', 'price', '€' + item.price);
+		const price = develop('span', 'price', '€' + item.price.toFixed(2));
 		const description = develop('p', 'itemDescription', item.description);
 		const orderButton = develop('button', 'orderButton', 'Voeg toe aan winkelmandje');
 		orderButton.addEventListener('click', addToCart);
