@@ -7,4 +7,17 @@ import palette from './palette.html';
 import penFancy from './pen-fancy.html';
 import puzzlePiece from './puzzle-piece.html';
 import shoppingBag from './shopping-bag.html';
-export {bookOpen, graduationCap, guitar, handHoldingHeart, homeIcon, palette, penFancy, puzzlePiece, shoppingBag};
+import trash from './trash.html';
+
+export {
+	bookOpen,
+	graduationCap,
+	guitar,
+	handHoldingHeart,
+	homeIcon,
+	palette,
+	penFancy,
+	puzzlePiece,
+	shoppingBag,
+	trash
+};

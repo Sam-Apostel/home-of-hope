@@ -1,5 +1,5 @@
 import style from './style.scss';
-import {homeIcon, bookOpen, penFancy, guitar, graduationCap, palette, handHoldingHeart, puzzlePiece, shoppingBag} from './icons/bundle';
+import {homeIcon, bookOpen, penFancy, guitar, graduationCap, palette, handHoldingHeart, puzzlePiece, shoppingBag, trash} from './icons/bundle';
 
 export class FontAwesomeIcon extends HTMLElement {
     constructor() {
@@ -9,24 +9,46 @@ export class FontAwesomeIcon extends HTMLElement {
 
     }
     connectedCallback(): void{
-        if (this.hasAttribute('home'))
+        if (this.hasAttribute('home')) {
+            this.shadowRoot.innerHTML = `<style>${style}</style>`;
             this.shadowRoot.innerHTML += homeIcon;
-        if (this.hasAttribute('book-open'))
+        }
+        if (this.hasAttribute('book-open')) {
+            this.shadowRoot.innerHTML = `<style>${style}</style>`;
             this.shadowRoot.innerHTML += bookOpen;
-        if (this.hasAttribute('pen-fancy'))
+        }
+        if (this.hasAttribute('pen-fancy')) {
+            this.shadowRoot.innerHTML = `<style>${style}</style>`;
             this.shadowRoot.innerHTML += penFancy;
-        if (this.hasAttribute('guitar'))
+        }
+        if (this.hasAttribute('guitar')) {
+            this.shadowRoot.innerHTML = `<style>${style}</style>`;
             this.shadowRoot.innerHTML += guitar;
-        if (this.hasAttribute('graduation-cap'))
+        }
+        if (this.hasAttribute('graduation-cap')) {
+            this.shadowRoot.innerHTML = `<style>${style}</style>`;
             this.shadowRoot.innerHTML += graduationCap;
-        if (this.hasAttribute('palette'))
+        }
+        if (this.hasAttribute('palette')) {
+            this.shadowRoot.innerHTML = `<style>${style}</style>`;
             this.shadowRoot.innerHTML += palette;
-        if (this.hasAttribute('hand-holding-heart'))
+        }
+        if (this.hasAttribute('hand-holding-heart')) {
+            this.shadowRoot.innerHTML = `<style>${style}</style>`;
             this.shadowRoot.innerHTML += handHoldingHeart;
-        if (this.hasAttribute('puzzle-piece'))
+        }
+        if (this.hasAttribute('puzzle-piece')) {
+            this.shadowRoot.innerHTML = `<style>${style}</style>`;
             this.shadowRoot.innerHTML += puzzlePiece;
-        if (this.hasAttribute('shopping-bag'))
+        }
+        if (this.hasAttribute('shopping-bag')) {
+            this.shadowRoot.innerHTML = `<style>${style}</style>`;
             this.shadowRoot.innerHTML += shoppingBag;
+        }
+        if (this.hasAttribute('trash')) {
+            this.shadowRoot.innerHTML = `<style>${style}</style>`;
+            this.shadowRoot.innerHTML += trash;
+        }
     }
 
     public static makeIcon = (type: string): FontAwesomeIcon => {
@@ -96,6 +118,13 @@ export class FontAwesomeIcon extends HTMLElement {
             this.setAttribute('shopping-bag', '');
         else
             this.removeAttribute('shopping-bag');
+    }
+
+    set trash(value) {
+        if (Boolean(value))
+            this.setAttribute('trash', '');
+        else
+            this.removeAttribute('trash');
     }
 
 }
