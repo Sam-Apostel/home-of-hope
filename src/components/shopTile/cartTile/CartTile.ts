@@ -199,12 +199,54 @@ export class CartTile extends HTMLElement {
 			totalCostValue.innerText = `€${price.total.toFixed(2)}`;
 		});
 
-		const order = {};
-		const orderButton = develop('button', 'pay', 'betaal', { disabled: '' });
+		const orderButton = develop('button', 'pay', 'betaal', {  });
 		this.shadowRoot.appendChild(orderButton);
 		orderButton.addEventListener('click', (e) => {
 			e.stopPropagation();
-			console.log('order', order);
+
+			const lines = [];
+			const address = {};
+			const shipping = 12.34;
+			const formData = new FormData();
+
+			formData.append("order", JSON.stringify(lines));
+			formData.append("address", JSON.stringify(address));
+			formData.append("shipping", JSON.stringify(shipping));
+
+			fetch('https://api.tigrr.be/order/new', {
+				method: 'POST',
+				mode: 'no-cors',
+				body: formData
+			})
+				.then(res => console.log(res));
+
+/*
+				order:[
+					{
+						name: "puzzle pieces book",
+						quantity: 2,
+						price: 19.99,
+						ISBN: "ISBN 978-9-46-407143-6"
+					},
+					{
+						name: "van jou wish card",
+						quantity: 1,
+						price: 1.40
+					}
+				],
+				address: {
+					name: {
+						first: "Sam",
+						last: "Apostel"
+					},
+					email: "sam@apostel.be",
+					street: "Dirkputstraat 172",
+					postal: "2850",
+					city: "Boom",
+					country: "BE"
+				},
+				shipping: 1.71
+*/
 		})
 
 		if (Array.from(this.items.keys()).length === 0){
