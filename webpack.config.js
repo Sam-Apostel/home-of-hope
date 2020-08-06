@@ -36,7 +36,8 @@ module.exports = {
             { from: 'src/style.css', to: '.' },
             { from: 'src/fonts', to: './fonts' },
             { from: 'src/images', to: './images' },
-            { from: 'src/favicon.ico', to: '.' }
+            { from: 'src/favicon.ico', to: '.' },
+            { from: 'src/.htaccess', to: '.' }
         ]),
         new webpack.HotModuleReplacementPlugin()
     ],

@@ -21,6 +21,49 @@ export class ShopTile extends HTMLElement{
     }
     private cart;
 
+    connectedCallback(): void{
+        const urlAttr = location.hash.substr(1);
+        if(urlAttr !== '') {
+            const urlSections = urlAttr.split('?');
+            if(urlSections[1]){
+                if(urlSections[1].indexOf('redirect=payment') >= 0){
+
+
+                    const formData = new FormData();
+                    formData.append("orderId", JSON.stringify(localStorage.getItem('orderId')));
+
+                    fetch('https://api.tigrr.be/order/open/', {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json'
+                        },
+                        body: formData
+                    })
+                        .then(res=>res.json())
+                        .then(res => {
+                            if(res.status === 'paid'){
+                                this.cart.empty();
+                            }else{
+                            	throw res;
+                            }
+                        })
+                        .catch(err => {
+                            const errorFormData = new FormData();
+                            errorFormData.append("data", JSON.stringify(err));
+                            fetch('https://api.tigrr.be/log/', {
+                                method: 'POST',
+                                headers: {
+                                    Accept: 'application/json'
+                                },
+                                body: errorFormData
+                            })
+                        });
+                }
+            }
+        }
+
+    }
+
     public static MakeTile = (source: ShopSourceInterface): ShopTile => {
         const tile = new ShopTile();
         tile.cart = CartTile.MakeTile(source);

@@ -46,9 +46,11 @@ export class NavItem extends HTMLElement {
     public select = (getAttr: string | undefined = ''): void => {
         this.classList.add('selected');
         this.contentItem.select();
-
+        //log.info(this, document);
         const pathEnd = getAttr !== '' ? '?' + getAttr : '';
-        window.history.pushState({}, 'Home of Hope - ' + this.contentItem.nav.id, location.origin + location.pathname + '#' + this.contentItem.nav.id + pathEnd);
+        document.title = this.contentItem.nav.id + ' - Home of Hope';
+        window.location.href = location.origin + location.pathname + '#' + this.contentItem.nav.id + pathEnd;
+        //window.history.pushState({}, this.contentItem.nav.id + ' - Home of Hope', location.origin + location.pathname + '#' + this.contentItem.nav.id + pathEnd);
     }
 
     attributeChangedCallback(name, oldValue, newValue): void {

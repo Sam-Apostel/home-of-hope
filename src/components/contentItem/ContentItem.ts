@@ -70,7 +70,7 @@ export class ContentItem extends HTMLElement {
         const images = ['94551839_231033338111000_5024844542109548544_n.jpg', '94440204_245019886905126_6073471776774422528_n.jpg'];
         images.forEach(src => {
             const image = document.createElement('img');
-            image.src = `images/${src}`;
+            image.src = `https://tigrr.b-cdn.net/images/${src}`;
             output.appendChild(image);
         });
         return output;
@@ -87,31 +87,31 @@ export class ContentItem extends HTMLElement {
                         {
                             id: 0,
                             name: 'Dankbaar',
-                            images: ['images/shop/IMG_5269.png'],
+                            images: ['dankbaar'],
                             price: 1.40,
                             description: ''
                         },{
                             id: 1,
                             name: 'Van jou',
-                            images: ['images/shop/IMG_5272.png'],
+                            images: ['vanjou'],
                             price: 1.40,
                             description: ''
                         },{
                             id: 2,
                             name: 'Thuis',
-                            images: ['images/shop/IMG_5275.png'],
+                            images: ['thuis'],
                             price: 1.40,
                             description: ''
                         },{
                             id: 3,
                             name: 'Wolf',
-                            images: ['images/shop/IMG_5278.png'],
+                            images: ['wolf'],
                             price: 1.40,
                             description: ''
                         },{
                             id: 4,
                             name: 'Honing & vanille',
-                            images: ['images/shop/IMG_5281.png'],
+                            images: ['honingenvanille'],
                             price: 1.40,
                             description: ''
                         }
@@ -124,7 +124,7 @@ export class ContentItem extends HTMLElement {
                         {
                             id: 0,
                             name: 'Puzzle Pieces',
-                            images: ['images/shop/IMG_5604.jpg'],
+                            images: ['puzzlepieces'],
                             price: 19.99,
                             description: ''
                         }

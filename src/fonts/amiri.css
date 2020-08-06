@@ -3,6 +3,7 @@
   font-style: normal;
   font-weight: 400;
   src: url(Amiri/Amiri-Regular.ttf);
+   font-display: swap;
 }
 
 @font-face {
@@ -10,6 +11,7 @@
   font-style: normal;
   font-weight: 700;
   src: url(Amiri/Amiri-Bold.ttf);
+   font-display: swap;
 }
 
 @font-face {
@@ -17,6 +19,7 @@
   font-style: italic;
   font-weight: 400;
   src: url(Amiri/Amiri-Italic.ttf);
+   font-display: swap;
 }
 
 @font-face {
@@ -24,5 +27,6 @@
   font-style: italic;
   font-weight: 700;
   src: url(Amiri/Amiri-BoldItalic.ttf);
+   font-display: swap;
 }
 

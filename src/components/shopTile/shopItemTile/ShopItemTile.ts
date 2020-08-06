@@ -1,5 +1,5 @@
 import style from './style.scss';
-import {develop} from '../../../utils/developer';
+import {asCurrency, develop, imageElement} from '../../../utils/developer';
 
 export interface ShopSourceItemInterface {
 	name: string;
@@ -19,8 +19,8 @@ export class ShopItemTile extends HTMLElement{
 		const tile = new ShopItemTile();
 
 		const title = develop('h3', 'itemTitle', item.name);
-		const image = develop('img', 'itemImage', [], {src: item.images[0], alt: item.name});
-		const price = develop('span', 'price', '€' + item.price.toFixed(2));
+		const image = imageElement('itemImage', item.images[0], item.name, ['420'], ['webp', 'jpg']);
+		const price = develop('span', 'price', asCurrency(item.price));
 		const description = develop('p', 'itemDescription', item.description);
 		const orderButton = develop('button', 'orderButton', 'Voeg toe aan winkelmandje');
 		orderButton.addEventListener('click', addToCart);

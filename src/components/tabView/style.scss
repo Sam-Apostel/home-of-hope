@@ -1,5 +1,5 @@
 nav{
-  background-color: #cacaca;
+  background-color: #37c5cc;
   position: fixed;
   left:0;
   height: 100%;
@@ -28,6 +28,38 @@ nav > div{
 nav > div > div{
   font-size: 10px;
   text-align: center;
+}
+
+@media (max-width: 500px){
+    nav{
+        padding: 0;
+        width: 60px;
+        display:flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    nav > .header{
+        display: none;
+    }
+    nav > div{
+        display: none;
+    }
+}
+
+@media (max-height: 490px){
+    nav{
+        padding: 0;
+        width: 60px;
+        display:flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    nav > .header{
+        display: none;
+    }
+    nav > div{
+        display: none;
+    }
 }
 
 

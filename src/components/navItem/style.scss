@@ -33,3 +33,27 @@ button font-awesome-icon{
 button:hover font-awesome-icon{
   margin: 0 10px 0 20px;
 }
+
+@media (max-width: 500px), (max-height: 490px){
+  button{
+    padding: 0;
+    display: grid;
+    place-items: center;
+    height: 60px;
+    span {
+      display: none;
+    }
+    font-awesome-icon{
+      --translate-y: -10px;
+      --size: 25px;
+      margin: 0 auto;
+      &[puzzle-piece]{
+        --size: 27px;
+        --translate-x: 2px;
+      }
+    }
+    &:hover font-awesome-icon{
+      margin: 0 auto;
+    }
+  }
+}

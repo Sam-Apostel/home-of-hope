@@ -33,9 +33,8 @@ export class TabView extends HTMLElement {
         if(urlAttr !== ''){
             const urlSections = urlAttr.split('?');
             this.navItems[urlSections[0]].select(urlSections[1]);
-
         }else {
-            this.navItems[items[0].id].select();
+            this.navItems[items[4].id].select();
         }
     };
 

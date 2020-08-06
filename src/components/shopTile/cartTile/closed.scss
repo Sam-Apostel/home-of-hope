@@ -1,5 +1,4 @@
 :host {
-	width: 30px;
 	height: 30px;
 }
 font-awesome-icon{
@@ -7,14 +6,48 @@ font-awesome-icon{
 	--translate-y: 0;
 }
 span{
-	position: absolute;
-	width: 30px;
-	height: 23px;
-	margin-top: 9px;
 	line-height: 23px;
 	text-align: center;
-	color: antiquewhite;
 	font-size: 1rem;
 	font-weight: bold;
 	font-family: Lato, sans-serif;
+	vertical-align: top;
+}
+button{
+	cursor: pointer;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	background: none;
+	border: none;
+	text-align: center;
+	line-height: 30px;
+}
+
+@media (max-width: 500px) {
+	:host{
+		box-sizing: border-box;
+		left: 60px;
+		right: 0;
+		width: unset;
+		height: 60px;
+		border-radius: 0;
+		padding: 0;
+		button{
+			line-height: 60px;
+		}
+		font-awesome-icon{
+			position: relative;
+			display: inline;
+			--size: 30px;
+			--translate-y: 5px;
+		}
+		span{
+			position: relative;
+			font-size: 1.2rem;
+			line-height: 60px;
+			width: unset;
+			height: unset;
+		}
+	}
 }

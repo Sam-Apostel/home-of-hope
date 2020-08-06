@@ -8,17 +8,17 @@ const config = {
     user: ftp.usr,
     password: ftp.pwd,
     host: ftp.hst,
-    port: ftp.port,
+    port: ftp.prt,
     localRoot: __dirname + "/dist",
     remoteRoot: ftp.rrt,
-    include: ["*","**/*"],
+    include: ["*","**/*", ".*"],
     deleteRemote: true,
     forcePasv: true
 };
 
 ftpDeploy
     .deploy(config)
-    .then(res => {
+    .then( () => {
         console.log("finished!");  //TODO: formatting res to pretty print in console to output what files are uploaded
     })
     .catch(err => console.log(err));

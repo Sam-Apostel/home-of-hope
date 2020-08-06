@@ -4,7 +4,7 @@ import closedStyle from './closed.scss';
 import orderStyle from './order.scss';
 import emptyStyle from './empty.scss';
 import { ShopSourceInterface } from '../ShopTile';
-import { develop, formElement } from '../../../utils/developer';
+import {develop, formElement, FEValue, asCurrency} from '../../../utils/developer';
 import { CartItemTile } from './cartItemTile/CartItemTile';
 import {FontAwesomeIcon} from '../../components';
 
@@ -15,17 +15,50 @@ export class CartTile extends HTMLElement {
 	}
 
 	private state: 'empty'|'closed'|'open'|'order';
+	private shipping: {
+		name: {
+			first?: string;
+			last?: string;
+		};
+		email?: string;
+		address: {
+			country?: 'BE' | 'NL';
+			city?: string;
+			postal?: string;
+			street?: string;
+			number?: string;
+			bus?: string;
+		};
+	};
+
+	private onMobile;
 
 	connectedCallback(): void {
+		this.onMobile = true;//window.matchMedia('(max-width: 500px)');
+
 		const savedAmounts = JSON.parse(localStorage.getItem('shopAmounts')) ?? [];
 		savedAmounts.forEach( ([id, amount]) => this.items.set( id, { amount }));
+		const savedState = JSON.parse(localStorage.getItem('cartState'));
 
 		const possibleStates = [ 'empty', 'closed', 'open', 'order' ];
-		possibleStates.forEach( (possibleState: 'empty'|'closed'|'open'|'order') => {
-			if(this.hasAttribute(possibleState)){
-				this.state = possibleState;
+		if(savedState && possibleStates.indexOf(savedState)){
+			this.state = savedState;
+		}else{
+			possibleStates.forEach( (possibleState: 'empty'|'closed'|'open'|'order') => {
+				if(this.hasAttribute(possibleState)){
+					this.state = possibleState;
+				}
+			});
+		}
+
+		const savedShipping = JSON.parse(localStorage.getItem('shipping'));
+		this.shipping = {
+			name: {},
+			address: {
+				country: 'BE'
 			}
-		});
+		}
+		this.shipping = {...this.shipping, ...savedShipping};
 
 		this.update();
 	}
@@ -71,11 +104,12 @@ export class CartTile extends HTMLElement {
 	private items = new Map();
 	private source = {categories:[]};
 
-	private openCart = (): void => {
+	private openCart = (e): void => {
+
 		this.removeAttribute('closed');
-		this.setAttribute('open', '');
-		this.removeEventListener('click', this.openCart);
-		this.updateAttributes('open');
+		this.setAttribute(this.onMobile?'order':'open', '');
+		e.target.removeEventListener('click', this.openCart);
+		this.updateAttributes(this.onMobile?'order':'open');
 	}
 
 	private renderEmpty = (): void => {
@@ -97,17 +131,21 @@ export class CartTile extends HTMLElement {
 		}
 
 		const inCart = Array.from(this.items.values()).map(({ amount }) => amount).filter(amount => amount > 0).length;
-		this.shadowRoot.appendChild(FontAwesomeIcon.makeIcon('webshop'));
-		this.shadowRoot.appendChild(develop('span', 'amountInCart', inCart));
+		const inCartTotal = Array.from(this.items.values()).map(({ amount }) => amount).reduce(((tot, amount) => tot + amount), 0);
+		const icon = FontAwesomeIcon.makeIcon('webshop');
+		//const amount = develop('span', 'amountInCart', inCart);
+		const amount = develop('span', 'amountInCart', inCart + ' artikel' + (inCart===1?'':'len') + ' / ' + inCartTotal + ' totaal' );
+		const openCart = develop('button', 'openCart', [icon, amount]);
+		this.shadowRoot.appendChild(openCart);
 
-		this.addEventListener('click', this.openCart);
+		openCart.addEventListener('click', this.openCart);
 
 		const closedStyleElement = develop('style', '', closedStyle[0][1]);
 		this.shadowRoot.appendChild(closedStyleElement);
 
 	}
 	private renderOpen = (): void => {
-		const closeCartButton = develop('button', 'closeCart', 'x');
+		const closeCartButton = develop('button', 'closeCart', 'winkelwagen sluiten');
 		closeCartButton.addEventListener('click', (e) => {
 			e.stopPropagation();
 			this.removeAttribute('open');
@@ -142,7 +180,7 @@ export class CartTile extends HTMLElement {
 		}
 	}
 	private renderOrder = (): void => {
-		const closeCartButton = develop('button', 'closeCart', 'x');
+		const closeCartButton = develop('button', 'closeCart', 'bestel overzicht sluiten');
 		closeCartButton.addEventListener('click', (e) => {
 			e.stopPropagation();
 			this.removeAttribute('order');
@@ -160,94 +198,130 @@ export class CartTile extends HTMLElement {
 		});
 		this.shadowRoot.appendChild(develop('div', 'items', items));
 
-		const name = formElement('text', 'name', '', 'name', 'name');
-		const email = formElement('text', 'email', '', 'email', 'email');
-		const country = formElement('text', 'ship-country', '', 'country', 'shipping country', );
-		const city = formElement('text', 'ship-city', '', 'city', 'shipping locality');
-		const postal = formElement('text', 'ship-zip', '', 'postal code', 'shipping postal-code');
-		const street = formElement('text', 'ship-address', '', 'street', 'shipping street-address');
-		const message = formElement('text', 'message', '', 'message');
-		const shippingForm = develop('form', 'shipping', [name, email, country, city, postal, street, message] );
-		this.shadowRoot.appendChild(shippingForm);
+		const firstName = formElement('text', 'given-name', '', {label: 'voornaam *', autocomplete: 'given-name', value: this.shipping.name.first}, (v=>this.shipping.name.first = v));
+		const lastName = formElement('text', 'family-name', '', {label: 'achternaam *', autocomplete: 'family-name', value: this.shipping.name.last}, (v=>this.shipping.name.last = v));
+		const email = formElement('text', 'email', '', {label: 'email adres *', autocomplete: 'email', value: this.shipping.email}, (v=>this.shipping.email = v));
+		const options = Object.entries({'BE': 'België', 'NL': 'Nederland'} )
+			.map( ([iso3166, label]) =>
+				new Option(label, iso3166)
+			);
+		const country = formElement('select', 'ship-country', '', {label: 'land *', autocomplete: 'shipping country', options , value: this.shipping.address.country}, (v=>this.shipping.address.country = v));
+		const city = formElement('text', 'ship-city', '', {label: 'gemeente *', autocomplete: 'shipping locality', value: this.shipping.address.city}, (v=>this.shipping.address.city = v));
+		const postal = formElement('text', 'ship-zip', '', {label: 'postcode *', autocomplete: 'shipping postal-code', value: this.shipping.address.postal}, (v=>this.shipping.address.postal = v));
+		const street = formElement('text', 'ship-address', '', {label: 'straat *', autocomplete: 'shipping street-address', value: this.shipping.address.street}, (v=>this.shipping.address.street = v));
+		const number = formElement('text', 'ship-number', '', {label: 'nummer *', autocomplete: 'shipping street-number', value: this.shipping.address.number}, (v=>this.shipping.address.number = v));
+		const bus = formElement('text', 'ship-bus', '', {label: 'bus', autocomplete: 'shipping street-bus', value: this.shipping.address.bus}, (v=>this.shipping.address.bus = v));
 
+		const shippingForm = develop('form', 'shipping', [firstName, lastName, email, country, city, postal, street, number, bus] );
+		this.shadowRoot.appendChild(shippingForm);
+		const hasBook = Array.from(this.items.entries()).some(([{category}, {amount}]) => category === 1 && amount > 0 );
 		const price = {
 			item: Array.from(this.items.entries()).map(([id, {amount}]) =>
 				this.source.categories[id.category].items[id.item].price * amount
-			).reduce((acc, val) => acc+=val, 0),
-			shipping: ([...country.childNodes][1] as HTMLInputElement).value === 'Belgium' ? 1.71: 2.28,
+			).reduce((total, subtotal) => total + subtotal, 0),
+			shipping: hasBook ? 6.1 : (this.shipping.address.country === 'BE' ? 1.71: 2.28),
 			total: 0
 		};
 		price.total = price.item + price.shipping;
 
 		const itemCostLabel = develop('span', 'label', 'Prijs');
-		const itemCostValue = develop('span', 'value', `€${price.item.toFixed(2)}`);
+		const itemCostValue = develop('span', 'value', asCurrency(price.item));
 		const itemCostRow = develop('span', 'item row', [itemCostLabel, itemCostValue]);
 
 		const shippingCostLabel = develop('span', 'label', 'Verzending');
-		const shippingCostValue = develop('span', 'value', `€${price.shipping.toFixed(2)}`);
+		const shippingCostValue = develop('span', 'value', asCurrency(price.shipping));
 		const shippingCostRow = develop('span', 'shipping row', [shippingCostLabel, shippingCostValue]);
 
 		const totalCostLabel = develop('span', 'label', 'Totaalprijs');
-		const totalCostValue = develop('span', 'value', `€${price.total.toFixed(2)}`);
+		const totalCostValue = develop('span', 'value', asCurrency(price.total));
 		const totalCostRow = develop('span', 'total row', [totalCostLabel, totalCostValue]);
 		this.shadowRoot.appendChild(develop('div', 'totals', [itemCostRow, shippingCostRow, totalCostRow]));
 
 		country.addEventListener('change', () => {
-			price.shipping = ([...country.childNodes][1] as HTMLInputElement).value === 'Belgium' ? 1.71: 2.28;
+			price.shipping = hasBook? 6.1 : (this.shipping.address.country === 'BE' ? 1.71: 2.28);
 			price.total = price.item + price.shipping;
-			shippingCostValue.innerText = `€${price.shipping.toFixed(2)}`;
-			totalCostValue.innerText = `€${price.total.toFixed(2)}`;
+			shippingCostValue.innerText = asCurrency(price.shipping);
+			totalCostValue.innerText = asCurrency(price.total);
 		});
 
-		const orderButton = develop('button', 'pay', 'betaal', {  });
+		const orderButton = develop('button', 'pay', 'verder naar betaling', { disabled: 'true' });
+
 		this.shadowRoot.appendChild(orderButton);
 		orderButton.addEventListener('click', (e) => {
 			e.stopPropagation();
 
-			const lines = [];
-			const address = {};
-			const shipping = 12.34;
+			const lines = Array.from(this.items.entries())
+				.map(([ {category, item}, { amount }]) => ({item: this.source.categories[category].items[item], amount}))
+				.filter( ({amount}) => amount > 0)
+				.map( ({item, amount}) => ({
+					name: item.name,
+					quantity: amount,
+					price: item.price,
+					imageUrl: `https://tigrr.b-cdn.net/images/420/jpg/${item.images[0]}.jpg`
+				}));
+			const address = {
+				name: this.shipping.name,
+				email: FEValue(email),
+				street: `${this.shipping.address.street ?? ''} ${this.shipping.address.number ?? ''} ${this.shipping.address.bus ?? ''}`,
+				postal: this.shipping.address.postal,
+				city: this.shipping.address.city,
+				country: this.shipping.address.country
+			};
+			const shipping = price.shipping;
+
 			const formData = new FormData();
 
 			formData.append("order", JSON.stringify(lines));
 			formData.append("address", JSON.stringify(address));
 			formData.append("shipping", JSON.stringify(shipping));
 
-			fetch('https://api.tigrr.be/order/new', {
+			fetch('https://api.tigrr.be/order/new/', {
 				method: 'POST',
-				mode: 'no-cors',
+				headers: {
+					Accept: 'application/json'
+				},
 				body: formData
 			})
-				.then(res => console.log(res));
-
-/*
-				order:[
-					{
-						name: "puzzle pieces book",
-						quantity: 2,
-						price: 19.99,
-						ISBN: "ISBN 978-9-46-407143-6"
-					},
-					{
-						name: "van jou wish card",
-						quantity: 1,
-						price: 1.40
+				.then(res=>res.json())
+				.then(res => {
+					if(res?.id){
+						localStorage.setItem('orderId',res.id);
 					}
-				],
-				address: {
-					name: {
-						first: "Sam",
-						last: "Apostel"
-					},
-					email: "sam@apostel.be",
-					street: "Dirkputstraat 172",
-					postal: "2850",
-					city: "Boom",
-					country: "BE"
-				},
-				shipping: 1.71
-*/
+					if(res?._links?.checkout?.href){
+						window.location = res?._links?.checkout?.href;
+					}else{
+						throw res;
+					}
+				})
+				.catch(err => {
+					formData.append("response", JSON.stringify(err));
+					fetch('https://api.tigrr.be/log/', {
+						method: 'POST',
+						headers: {
+							Accept: 'application/json'
+						},
+						body: formData
+					}).then().catch();
+				});
+
 		})
+		const toggleButton = (): void => {
+			(orderButton as HTMLButtonElement).disabled = !(
+				firstName.querySelector('input').value !== '' &&
+				lastName.querySelector('input').value !== '' &&
+				email.querySelector('input').value !== '' &&
+				city.querySelector('input').value !== '' &&
+				postal.querySelector('input').value !== '' &&
+				street.querySelector('input').value !== '' &&
+				number.querySelector('input').value !== '' &&
+				Array.from(this.items.values()).filter(({ amount }) =>  amount > 0).length > 0
+			);
+		};
+		toggleButton();
+		shippingForm.addEventListener('change', ()=>{
+			localStorage.setItem('shipping', JSON.stringify(this.shipping));
+			toggleButton();
+		});
 
 		if (Array.from(this.items.keys()).length === 0){
 			this.removeAttribute('order');
@@ -256,6 +330,11 @@ export class CartTile extends HTMLElement {
 			return;
 		}
 		this.shadowRoot.appendChild(develop('style', '', orderStyle[0][1]));
+	}
+	public empty = (): void => {
+		localStorage.removeItem('shopAmounts');
+		this.items = new Map();
+		this.update();
 	}
 
 	private update = (): void => {
@@ -284,6 +363,8 @@ export class CartTile extends HTMLElement {
 			return [id, amount];
 		})
 		localStorage.setItem('shopAmounts', JSON.stringify(amountsArray));
+		localStorage.setItem('cartState', JSON.stringify(this.state));
+		localStorage.setItem('shipping', JSON.stringify(this.shipping));
 	}
 
 	private updateQuantity = (element, amount): void => {

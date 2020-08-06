@@ -1,5 +1,5 @@
 import style from './style.scss';
-import { develop } from '../../../../utils/developer';
+import {asCurrency, develop, imageElement} from '../../../../utils/developer';
 import { ShopSourceItemInterface } from '../../shopItemTile/ShopItemTile';
 import {FontAwesomeIcon} from '../../../components';
 
@@ -24,7 +24,7 @@ export class CartItemTile extends HTMLElement {
 	private setAmount = (amount: number): void => {
 
 		(this.shadowRoot.querySelector('.amount') as HTMLInputElement).value = amount.toString();
-		(this.shadowRoot.querySelector('.totalPrice') as HTMLElement).innerText = `€${(this.source.price * amount).toFixed(2)}`;
+		(this.shadowRoot.querySelector('.totalPrice') as HTMLElement).innerText = asCurrency(this.source.price * amount);
 		if(this.amount !== 0 && amount === 0){
 			this.shadowRoot.querySelector('.remove').classList.remove('hidden');
 			this.shadowRoot.querySelector('.subtract').classList.add('hidden');
@@ -37,7 +37,7 @@ export class CartItemTile extends HTMLElement {
 
 	private buildItem = (): Array<HTMLElement> => {
 		const product = this.source;
-		const imgElem = develop('img', 'image', [], {src: product.images[0]});
+		const imgElem = imageElement('image', product.images[0], product.name, ['420' /* TODO: optimise for 40px */], ['webp', 'jpg']);
 		const nameElem = develop('span', 'name', product.name ?? '');
 		const amountInput = develop('input', 'amount', [], {type: 'text'/* TODO: change this to number for mobile users */, value: this.amount.toString()});
 		const subtractButton = develop('button', 'subtract', '-');
@@ -69,8 +69,8 @@ export class CartItemTile extends HTMLElement {
 			}
 		});
 		const quantityInput = develop('span', 'quantityInput', [subtractButton, removeButton, amountInput, addButton]);
-		const totalPriceElem = develop('span','totalPrice', `€${(product.price * this.amount).toFixed(2)}`);
-		const priceElem = develop('span','price', `€${product.price.toFixed(2)}`);
+		const totalPriceElem = develop('span','totalPrice', asCurrency(product.price * this.amount));
+		const priceElem = develop('span','price', asCurrency(product.price));
 		return [imgElem, nameElem, quantityInput, priceElem, totalPriceElem];
 	}
 
