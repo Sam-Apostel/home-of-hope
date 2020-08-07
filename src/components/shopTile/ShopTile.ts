@@ -2,6 +2,8 @@ import style from './style.scss';
 import { CartTile } from './cartTile/CartTile';
 import { ShopItemTile, ShopSourceItemInterface } from './shopItemTile/shopItemTile';
 import { develop } from '../../utils/developer';
+import log from './../../utils/logger';
+import endpoints from '../../api/endpoints';
 
 
 interface ShopSourceCategoryInterface {
@@ -32,7 +34,7 @@ export class ShopTile extends HTMLElement{
                     const formData = new FormData();
                     formData.append("orderId", JSON.stringify(localStorage.getItem('orderId')));
 
-                    fetch('https://api.tigrr.be/order/open/', {
+                    fetch(endpoints.orderStatus, {
                         method: 'POST',
                         headers: {
                             Accept: 'application/json'
@@ -47,16 +49,8 @@ export class ShopTile extends HTMLElement{
                             	throw res;
                             }
                         })
-                        .catch(err => {
-                            const errorFormData = new FormData();
-                            errorFormData.append("data", JSON.stringify(err));
-                            fetch('https://api.tigrr.be/log/', {
-                                method: 'POST',
-                                headers: {
-                                    Accept: 'application/json'
-                                },
-                                body: errorFormData
-                            })
+                        .catch(response => {
+                            log.error({response, endpoint: endpoints.orderStatus}, formData);
                         });
                 }
             }

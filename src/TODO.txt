@@ -1,5 +1,11 @@
-TODO: kentico content
-TODO: scaling update on browser resize
-TODO: introductie
-TODO: responsiveness
-TODO: webshop
+TODO: replace parent callbacks to this.dispatchEvent(new CustomEvent('add', { detail: { value: this.value }, bubbles: true } ) )
+TODO: move more logic to connectedCallback and use disconnectedCallback
+TODO: message on payment success.
+TODO: status page
+TODO: increase amountbutton size for mobile
+TODO: mobile: amount input = type number
+TODO: form validation
+TODO: disable send button
+TODO: home of hope title on homepage
+TODO: product specs
+TODO; footer

@@ -5,8 +5,10 @@ import orderStyle from './order.scss';
 import emptyStyle from './empty.scss';
 import { ShopSourceInterface } from '../ShopTile';
 import {develop, formElement, FEValue, asCurrency} from '../../../utils/developer';
+import log from '../../../utils/logger';
 import { CartItemTile } from './cartItemTile/CartItemTile';
 import {FontAwesomeIcon} from '../../components';
+import api from '../../../api/api';
 
 export class CartTile extends HTMLElement {
 	public constructor() {
@@ -250,7 +252,7 @@ export class CartTile extends HTMLElement {
 		orderButton.addEventListener('click', (e) => {
 			e.stopPropagation();
 
-			const lines = Array.from(this.items.entries())
+			const order = Array.from(this.items.entries())
 				.map(([ {category, item}, { amount }]) => ({item: this.source.categories[category].items[item], amount}))
 				.filter( ({amount}) => amount > 0)
 				.map( ({item, amount}) => ({
@@ -269,40 +271,18 @@ export class CartTile extends HTMLElement {
 			};
 			const shipping = price.shipping;
 
-			const formData = new FormData();
 
-			formData.append("order", JSON.stringify(lines));
-			formData.append("address", JSON.stringify(address));
-			formData.append("shipping", JSON.stringify(shipping));
 
-			fetch('https://api.tigrr.be/order/new/', {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json'
-				},
-				body: formData
-			})
-				.then(res=>res.json())
-				.then(res => {
-					if(res?.id){
-						localStorage.setItem('orderId',res.id);
-					}
-					if(res?._links?.checkout?.href){
-						window.location = res?._links?.checkout?.href;
-					}else{
-						throw res;
-					}
-				})
-				.catch(err => {
-					formData.append("response", JSON.stringify(err));
-					fetch('https://api.tigrr.be/log/', {
-						method: 'POST',
-						headers: {
-							Accept: 'application/json'
-						},
-						body: formData
-					}).then().catch();
-				});
+			api.newOrder(
+				{order, address, shipping},
+				response => {
+					if(response?.id) localStorage.setItem('orderId', response.id);
+					if(response?._links?.checkout?.href)
+						window.location = response?._links?.checkout?.href;
+					else throw response;
+
+				}
+			);
 
 		})
 		const toggleButton = (): void => {
