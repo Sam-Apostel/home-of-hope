@@ -12,7 +12,7 @@ export class CartItemTile extends HTMLElement {
 	connectedCallback(): void {
 		this.setAmount(parseInt(this.getAttribute('amount')));
 	}
-	attributeChangedCallback(name, oldValue, newValue): void {
+	attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
 		if(name === 'amount') this.setAmount(parseInt(newValue));
 	}
 
@@ -74,7 +74,7 @@ export class CartItemTile extends HTMLElement {
 		return [imgElem, nameElem, quantityInput, priceElem, totalPriceElem];
 	}
 
-	public static MakeTile = (source: ShopSourceItemInterface, id, controls): CartItemTile => {
+	public static MakeTile = (source: ShopSourceItemInterface, id: {category: number, item: number}, controls: {set: (number)=>void, add: (number)=>void, subtract: (number)=>void}): CartItemTile => {
 		const tile = new CartItemTile();
 		tile.source = source;
 		tile.itemId = id;

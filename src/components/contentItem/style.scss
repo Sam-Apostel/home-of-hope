@@ -19,6 +19,7 @@ h2, h3{
   width: calc(100% - 170px);
   overflow-y: auto;
   left: 170px;
+  display: block;
 }
 p{
   font-family: Amiri, "Times New Roman", serif;
@@ -38,7 +39,7 @@ blockquote{
 blockquote::before{
   content: '“';
   position: absolute;
-  margin-left: -9px;
+  margin-left: -7px;
 }
 blockquote::after{
   content: '”';

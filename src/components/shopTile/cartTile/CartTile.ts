@@ -5,7 +5,6 @@ import orderStyle from './order.scss';
 import emptyStyle from './empty.scss';
 import { ShopSourceInterface } from '../ShopTile';
 import {develop, formElement, FEValue, asCurrency} from '../../../utils/developer';
-import log from '../../../utils/logger';
 import { CartItemTile } from './cartItemTile/CartItemTile';
 import {FontAwesomeIcon} from '../../components';
 import api from '../../../api/api';
@@ -24,7 +23,7 @@ export class CartTile extends HTMLElement {
 		};
 		email?: string;
 		address: {
-			country?: 'BE' | 'NL';
+			country?: 'BE' | 'NL' | 'DE';
 			city?: string;
 			postal?: string;
 			street?: string;
@@ -33,15 +32,14 @@ export class CartTile extends HTMLElement {
 		};
 	};
 
-	private onMobile;
 
 	connectedCallback(): void {
-		this.onMobile = true;//window.matchMedia('(max-width: 500px)');
+		if(this.items.size === 0) {
+			const savedAmounts = JSON.parse(localStorage.getItem('shopAmounts')) ?? [];
+			savedAmounts.forEach(([id, amount]) => this.items.set(id, {amount}));
+		}
 
-		const savedAmounts = JSON.parse(localStorage.getItem('shopAmounts')) ?? [];
-		savedAmounts.forEach( ([id, amount]) => this.items.set( id, { amount }));
 		const savedState = JSON.parse(localStorage.getItem('cartState'));
-
 		const possibleStates = [ 'empty', 'closed', 'open', 'order' ];
 		if(savedState && possibleStates.indexOf(savedState)){
 			this.state = savedState;
@@ -65,27 +63,25 @@ export class CartTile extends HTMLElement {
 		this.update();
 	}
 
-	attributeChangedCallback(name): void {
+	attributeChangedCallback(name: string): void {
 		this.updateAttributes(name);
 	}
 
-	private updateAttributes = (name): void => {
+	private updateAttributes = (name: string): void => {
 		const possibleStates = [ 'empty', 'closed', 'open', 'order' ];
-		possibleStates.forEach( (possibleState: 'empty'|'closed'|'open'|'order' ) => {
-			if( name === possibleState){
-				this.state = possibleState;
-			}
-		});
+		if(possibleStates.includes(name)) {
+			this.state = (name as  'empty' | 'closed' | 'open' | 'order');
+		}
 		this.update();
 	}
 
-	public add = (id, amount): void => {
+	public add = (id: {category: number, item: number}, amount: number): void => {
 		const refKey = Array.from(this.items.keys()).filter(ref =>  Object.keys(ref).every((key) =>  ref[key] === id[key]))[0] ?? id;
 		const item = this.items.get(refKey) ?? {};
 		this.items.set(refKey, { ...item, amount: (item.amount ?? 0) + amount });
 		this.update();
 	}
-	public subtract = (id, amount): void => {
+	public subtract = (id: {category: number, item: number}, amount: number): void => {
 		const refKey = Array.from(this.items.keys()).filter(ref =>  Object.keys(ref).every((key) =>  ref[key] === id[key]))[0];
 		if(this.items.get(refKey).amount - amount < 0){
 			this.items.delete(refKey);
@@ -95,7 +91,7 @@ export class CartTile extends HTMLElement {
 		}
 		this.update();
 	}
-	public set = (id, amount): void => {
+	public set = (id: {category: number, item: number}, amount: number): void => {
 		const refKey = Array.from(this.items.keys()).filter(ref =>  Object.keys(ref).every((key) =>  ref[key] === id[key]))[0] ?? id;
 		if(amount < 0){
 			this.items.delete(refKey);
@@ -109,9 +105,9 @@ export class CartTile extends HTMLElement {
 	private openCart = (e): void => {
 
 		this.removeAttribute('closed');
-		this.setAttribute(this.onMobile?'order':'open', '');
+		this.setAttribute('order', '');
 		e.target.removeEventListener('click', this.openCart);
-		this.updateAttributes(this.onMobile?'order':'open');
+		this.updateAttributes('order');
 	}
 
 	private renderEmpty = (): void => {
@@ -203,7 +199,7 @@ export class CartTile extends HTMLElement {
 		const firstName = formElement('text', 'given-name', '', {label: 'voornaam *', autocomplete: 'given-name', value: this.shipping.name.first}, (v=>this.shipping.name.first = v));
 		const lastName = formElement('text', 'family-name', '', {label: 'achternaam *', autocomplete: 'family-name', value: this.shipping.name.last}, (v=>this.shipping.name.last = v));
 		const email = formElement('text', 'email', '', {label: 'email adres *', autocomplete: 'email', value: this.shipping.email}, (v=>this.shipping.email = v));
-		const options = Object.entries({'BE': 'België', 'NL': 'Nederland'} )
+		const options = Object.entries({'BE': 'België', 'NL': 'Nederland', 'DE': 'Deutschland'} )
 			.map( ([iso3166, label]) =>
 				new Option(label, iso3166)
 			);
@@ -217,11 +213,31 @@ export class CartTile extends HTMLElement {
 		const shippingForm = develop('form', 'shipping', [firstName, lastName, email, country, city, postal, street, number, bus] );
 		this.shadowRoot.appendChild(shippingForm);
 		const hasBook = Array.from(this.items.entries()).some(([{category}, {amount}]) => category === 1 && amount > 0 );
+		const hasCard = Array.from(this.items.entries()).some(([{category}, {amount}]) => category === 0 && amount > 0 );
+		const calculateShipping = () => {
+			return (
+				this.shipping.address.country === 'NL' && (
+					(!hasBook &&  hasCard && 2.28) ||
+					( hasBook && !hasCard && 0) ||
+					( hasBook &&  hasCard  && 0)
+				) ||
+				this.shipping.address.country === 'BE' && (
+					(!hasBook &&  hasCard && 1.71) ||
+					( hasBook && !hasCard && 0) ||
+					( hasBook &&  hasCard && 0)
+				) ||
+				this.shipping.address.country === 'DE' && (
+					(!hasBook &&  hasCard && 2.28) ||
+					( hasCard &&  hasBook && 2.28) ||
+					( hasBook &&  hasCard && 0)
+				)
+			);
+		}
 		const price = {
 			item: Array.from(this.items.entries()).map(([id, {amount}]) =>
 				this.source.categories[id.category].items[id.item].price * amount
 			).reduce((total, subtotal) => total + subtotal, 0),
-			shipping: hasBook ? 6.1 : (this.shipping.address.country === 'BE' ? 1.71: 2.28),
+			shipping: calculateShipping(),
 			total: 0
 		};
 		price.total = price.item + price.shipping;
@@ -231,7 +247,7 @@ export class CartTile extends HTMLElement {
 		const itemCostRow = develop('span', 'item row', [itemCostLabel, itemCostValue]);
 
 		const shippingCostLabel = develop('span', 'label', 'Verzending');
-		const shippingCostValue = develop('span', 'value', asCurrency(price.shipping));
+		const shippingCostValue = develop('span', 'value', asCurrency(price.shipping, true));
 		const shippingCostRow = develop('span', 'shipping row', [shippingCostLabel, shippingCostValue]);
 
 		const totalCostLabel = develop('span', 'label', 'Totaalprijs');
@@ -240,9 +256,9 @@ export class CartTile extends HTMLElement {
 		this.shadowRoot.appendChild(develop('div', 'totals', [itemCostRow, shippingCostRow, totalCostRow]));
 
 		country.addEventListener('change', () => {
-			price.shipping = hasBook? 6.1 : (this.shipping.address.country === 'BE' ? 1.71: 2.28);
+			price.shipping = calculateShipping();
 			price.total = price.item + price.shipping;
-			shippingCostValue.innerText = asCurrency(price.shipping);
+			shippingCostValue.innerText = asCurrency(price.shipping, true);
 			totalCostValue.innerText = asCurrency(price.total);
 		});
 

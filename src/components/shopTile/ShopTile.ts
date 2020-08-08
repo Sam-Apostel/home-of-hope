@@ -2,8 +2,7 @@ import style from './style.scss';
 import { CartTile } from './cartTile/CartTile';
 import { ShopItemTile, ShopSourceItemInterface } from './shopItemTile/shopItemTile';
 import { develop } from '../../utils/developer';
-import log from './../../utils/logger';
-import endpoints from '../../api/endpoints';
+import api from '../../api/api';
 
 
 interface ShopSourceCategoryInterface {
@@ -29,29 +28,16 @@ export class ShopTile extends HTMLElement{
             const urlSections = urlAttr.split('?');
             if(urlSections[1]){
                 if(urlSections[1].indexOf('redirect=payment') >= 0){
-
-
-                    const formData = new FormData();
-                    formData.append("orderId", JSON.stringify(localStorage.getItem('orderId')));
-
-                    fetch(endpoints.orderStatus, {
-                        method: 'POST',
-                        headers: {
-                            Accept: 'application/json'
-                        },
-                        body: formData
-                    })
-                        .then(res=>res.json())
-                        .then(res => {
+                    api.orderStatus(
+                        {orderId: localStorage.getItem('orderId')},
+                        res => {
                             if(res.status === 'paid'){
                                 this.cart.empty();
                             }else{
-                            	throw res;
+                                throw res;
                             }
-                        })
-                        .catch(response => {
-                            log.error({response, endpoint: endpoints.orderStatus}, formData);
-                        });
+                        }
+                    );
                 }
             }
         }

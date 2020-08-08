@@ -2,8 +2,7 @@ import endpoints from './endpoints';
 import log from '../utils/logger';
 
 const endpointToApiCall = (api, [name, endpoint] ) => {
-	api[name] = (postData = {}, then = () => {}) => {
-
+	api[name] = (postData = {}, then = (res) => {if(!res) throw res}) => {
 		const formData = new FormData();
 		Object.entries(postData).forEach( ([key, value]) => {
 			formData.append(key, JSON.stringify(value));
@@ -22,6 +21,7 @@ const endpointToApiCall = (api, [name, endpoint] ) => {
 				log.error({ endpoint, response, ...postData});
 			});
 	}
+	return api;
 };
 
 export default Object.entries(endpoints).reduce( endpointToApiCall, {});

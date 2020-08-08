@@ -19,7 +19,7 @@ export class ContentItem extends HTMLElement {
       output.appendChild(title);
       output.appendChild(paragraph);
       return output;
-    };
+    }
 
     private _getAspergerContent = (): HTMLDivElement => {
         const output = document.createElement('div');
@@ -57,13 +57,13 @@ export class ContentItem extends HTMLElement {
         output.appendChild(title);
         output.appendChild(body);
         return output;
-    };
+    }
 
     private _getPoemsContent = (): HTMLDivElement => {
         const output = document.createElement('div');
         output.appendChild(InstagramFeed.makeFeed('woord.voor.woord'));
         return output;
-    };
+    }
 
     private _getArtContent = (): HTMLDivElement => {
         const output = document.createElement('div');
@@ -74,7 +74,7 @@ export class ContentItem extends HTMLElement {
             output.appendChild(image);
         });
         return output;
-    };
+    }
 
     private _getShopContent = (): ShopTile => {
         const source = {
@@ -114,7 +114,28 @@ export class ContentItem extends HTMLElement {
                             images: ['honingenvanille'],
                             price: 1.40,
                             description: ''
-                        }
+                        }/*,{
+                            id: 5,
+                            name: 'Wenskaarten bundel',
+                            images: ['bundle'],
+                            price: 6.5,
+                            type: 'bundle',
+                            description: ''
+                        },{
+                            id: 6,
+                            name: 'persoonlijke Wenskaart',
+                            images: ['persoonlijk'],
+                            price: 1.5,
+                            type: 'personal',
+                            description: ''
+                        },{
+                            id: 7,
+                            name: 'cadeau Wenskaart',
+                            images: ['persoonlijk'],
+                            price: 1.5,
+                            type: 'personal',
+                            description: ''
+                        }*/
                     ]
                 },{
                     name: 'Boeken',
@@ -138,17 +159,19 @@ export class ContentItem extends HTMLElement {
     public constructor() {
         super();
         this._root = this.attachShadow({mode: 'open'});
-    };
+    }
 
     public static makeItem = (id: string, icon: string): ContentItem => {
         const contentItem = new ContentItem();
         contentItem._nav = {icon, id};
         contentItem._build(id);
         return contentItem;
-    };
+    }
+
     get navItem(): NavItem{
         return NavItem.makeItem(this);
     }
+
     get nav(): Record<string, string>{
         return this._nav;
     }
@@ -166,20 +189,15 @@ export class ContentItem extends HTMLElement {
         }else if(id === 'Home'){
             this.addContent(this._getHomeContent());
         }
-    };
+    }
 
     private attachMarkup = (): void => {
         this._root.innerHTML += `<style>${style}</style>`;
-        this._root.innerHTML += `<style class="selectedStyle">
-                                    :host{
-                                        display: none;
-                                    }     
-                                </style>`;
-    };
+    }
 
-    public addContent = (content): void => {
+    public addContent = (content: HTMLElement): void => {
         this._root.appendChild(content);
-    };
+    }
 
     public deselect = (): void => {
         this.classList.remove('selected');
@@ -187,18 +205,6 @@ export class ContentItem extends HTMLElement {
 
     public select = (): void => {
         this.classList.add('selected');
-    }
-
-    attributeChangedCallback(name, oldValue, newValue): void {
-        if(newValue === 'selected') {
-            this._root.querySelector('.selectedStyle').textContent = `:host{
-                                                                                display:block;
-                                                                              }`
-        }else if(oldValue === 'selected'){
-            this._root.querySelector('.selectedStyle').textContent = `:host{
-                                                                                display: none;
-                                                                             }`
-        }
     }
 
 }

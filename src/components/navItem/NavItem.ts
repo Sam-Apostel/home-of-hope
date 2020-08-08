@@ -3,7 +3,7 @@ import style from './style.scss';
 import { ContentItem } from "../contentItem/ContentItem";
 
 export class NavItem extends HTMLElement {
-    private contentItem: ContentItem;
+    public contentItem: ContentItem;
 
     static get observedAttributes(): Array<string>{
         return ['class'];
@@ -12,7 +12,7 @@ export class NavItem extends HTMLElement {
     public constructor() {
         super();
         this.attachShadow({mode: 'open'});
-    };
+    }
 
     public static makeItem = (contentItem: ContentItem): NavItem => {
         const navItem = new NavItem();
@@ -45,15 +45,14 @@ export class NavItem extends HTMLElement {
 
     public select = (getAttr: string | undefined = ''): void => {
         this.classList.add('selected');
+        //dispatch('select', this.contentItem);
+
         this.contentItem.select();
-        //log.info(this, document);
         const pathEnd = getAttr !== '' ? '?' + getAttr : '';
-        document.title = this.contentItem.nav.id + ' - Home of Hope';
-        window.location.href = location.origin + location.pathname + '#' + this.contentItem.nav.id + pathEnd;
-        //window.history.pushState({}, this.contentItem.nav.id + ' - Home of Hope', location.origin + location.pathname + '#' + this.contentItem.nav.id + pathEnd);
+        window.history.pushState({}, this.contentItem.nav.id + ' - Home of Hope', location.origin + location.pathname + '#' + this.contentItem.nav.id + pathEnd);
     }
 
-    attributeChangedCallback(name, oldValue, newValue): void {
+    attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
         if(newValue === 'selected' || oldValue === 'selected' ){
             this.shadowRoot.querySelector('button').classList.toggle('selected');
         }

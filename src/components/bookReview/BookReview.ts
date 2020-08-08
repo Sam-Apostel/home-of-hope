@@ -7,21 +7,21 @@ export class BookReview extends HTMLElement {
     public constructor() {
         super();
         this.root = this.attachShadow({mode: 'open'});
-    };
+    }
 
     public static makeTile = (header: Record<string, string>, body: string): BookReview => {
         const tile = new BookReview();
         tile.build(header, body);
         return tile;
-    };
+    }
 
     private build = (header: Record<string, string>, body: string): void => {
         this.attachMarkup(this.buildTemplate(header, body));
-    };
+    }
 
     private attachMarkup = (content: string): void => {
         this.root.innerHTML = content + `<style>${style}</style>`;
-    };
+    }
 
     private buildTemplate = (header: Record<string,string>, body: string): string => {
         const {age, author, awards, genre, published, publisher, rating, title} = header;
@@ -44,11 +44,11 @@ export class BookReview extends HTMLElement {
         ).replace(
             '{body}', body
         );
-    };
+    }
 
-    public addContent = (content): void => {
+    public addContent = (content: HTMLElement): void => {
         this.root.appendChild(content);
-    };
+    }
 
 }
 

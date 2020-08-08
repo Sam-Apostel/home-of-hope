@@ -57,70 +57,70 @@ export class FontAwesomeIcon extends HTMLElement {
         return icon;
     };
 
-    set home(value) {
+    set home(value: 'true' | 'false') {
         if (Boolean(value))
             this.setAttribute('home', '');
         else
             this.removeAttribute('home');
     }
 
-    set stories(value) {
+    set stories(value: 'true' | 'false') {
         if (Boolean(value))
             this.setAttribute('book-open', '');
         else
             this.removeAttribute('book-open');
     }
 
-    set poems(value) {
+    set poems(value: 'true' | 'false') {
         if (Boolean(value))
             this.setAttribute('pen-fancy', '');
         else
             this.removeAttribute('pen-fancy');
     }
 
-    set music(value) {
+    set music(value: 'true' | 'false') {
         if (Boolean(value))
             this.setAttribute('guitar', '');
         else
             this.removeAttribute('guitar');
     }
 
-    set research(value) {
+    set research(value: 'true' | 'false') {
         if (Boolean(value))
             this.setAttribute('graduation-cap', '');
         else
             this.removeAttribute('graduation-cap');
     }
 
-    set art(value) {
+    set art(value: 'true' | 'false') {
         if (Boolean(value))
             this.setAttribute('palette', '');
         else
             this.removeAttribute('palette');
     }
 
-    set interpreting(value) {
+    set interpreting(value: 'true' | 'false') {
         if (Boolean(value))
             this.setAttribute('hand-holding-heart', '');
         else
             this.removeAttribute('hand-holding-heart');
     }
 
-    set asperger(value) {
+    set asperger(value: 'true' | 'false') {
         if (Boolean(value))
             this.setAttribute('puzzle-piece', '');
         else
             this.removeAttribute('puzzle-piece');
     }
 
-    set webshop(value) {
+    set webshop(value: 'true' | 'false') {
         if (Boolean(value))
             this.setAttribute('shopping-bag', '');
         else
             this.removeAttribute('shopping-bag');
     }
 
-    set trash(value) {
+    set trash(value: 'true' | 'false') {
         if (Boolean(value))
             this.setAttribute('trash', '');
         else

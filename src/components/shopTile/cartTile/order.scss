@@ -7,7 +7,7 @@
 	overflow-y:scroll;
 	overflow-x: hidden;
 	grid-template-columns: 1fr 300px minmax(200px, 430px) 200px 1fr;
-	grid-template-rows: 1fr auto auto auto auto 1fr;
+	grid-template-rows: 1fr auto auto auto auto auto 1fr;
 	padding: 7.5px;
 	grid-gap: 7.5px;
 	grid-template-areas:
@@ -16,6 +16,7 @@
 		". items shipping shipping ."
 		". items totals totals ."
 		". items pay pay ."
+		". items . . ."
 		". . . . .";
 }
 @media (max-width: 870px) {

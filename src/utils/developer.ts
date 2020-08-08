@@ -23,8 +23,8 @@ export const develop = (type: string, classNames: string, content: Array<HTMLEle
 	return elem;
 };
 
-const selectElement = (name: string, classNames: string, extraAttr: Record<string, string|Array<HTMLOptionElement>>, changedCallBack): HTMLLabelElement => {
-	const po = (o): Record<string, string> => Object.entries(o).reduce((a,[k,v]) => (v ? (a[k]=v, a) : a), {});
+const selectElement = (name: string, classNames: string, extraAttr: Record<string, string|Array<HTMLOptionElement>>, changedCallBack: (string) => void): HTMLLabelElement => {
+	const po = (o): Record<string, string> => Object.entries(o).reduce((a,[k,v]) => {if(v) a[k] = v; return a}, {});
 	const pa = (a): Array<HTMLElement|string|number> => a.filter( a => a ?? false);
 	const {label, autocomplete, placeholder, options, value} = extraAttr;
 	const select = develop('select', '', [], po({name, placeholder, autocomplete})) as HTMLSelectElement;
@@ -40,9 +40,9 @@ const selectElement = (name: string, classNames: string, extraAttr: Record<strin
 	return develop('label', classNames, pa([label, select])) as HTMLLabelElement;
 }
 
-export const formElement = (type: string, name: string, classNames: string, extraAttr: Record<string, string|Array<HTMLOptionElement>>, changedCallBack): HTMLLabelElement => {
+export const formElement = (type: string, name: string, classNames: string, extraAttr: Record<string, string|Array<HTMLOptionElement>>, changedCallBack: (string) => void): HTMLLabelElement => {
 	if( type === 'select' ) return selectElement(name, classNames, extraAttr, changedCallBack);
-	const po = (o): Record<string, string> => Object.entries(o).reduce((a,[k,v]) => (v ? (a[k]=v, a) : a), {});
+	const po = (o): Record<string, string> => Object.entries(o).reduce((a,[k,v]) => {if(v) a[k] = v; return a}, {});
 	const pa = (a): Array<HTMLElement|string|number> => a.filter( a => a ?? false);
 	const {label, autocomplete, placeholder, value} = extraAttr;
 
@@ -56,7 +56,7 @@ export const formElement = (type: string, name: string, classNames: string, extr
 
 export const imageElement = (classNames: string, src: string, alt: string, sizes: Array<string>, formats: Array<string>): HTMLPictureElement => {
 	const sources = formats.map(format =>
-		develop('srcset', '', [], {srcset: sizes.reduce((acc, size) => (acc += `https://tigrr.b-cdn.net/images/${size}/${format}/src.${format} ${size}w `, acc), ''), type:  `image/${format}`})
+		develop('srcset', '', [], {srcset: sizes.reduce((acc, size) => acc + `https://tigrr.b-cdn.net/images/${size}/${format}/src.${format} ${size}w `, ''), type:  `image/${format}`})
 	);
 	const img = develop('img', classNames,[], {src: `https://tigrr.b-cdn.net/images/${sizes[0]}/${formats[1]}/${src}.${formats[1]}`, alt});
 	return develop('picture', '', [sources, img]);
@@ -111,17 +111,10 @@ export const initObjectIterators = (): void => {
 	});
 }
 
-export const asCurrency = (number): string => {
-	const big = `€${Math.ceil(number * 100 )}`;
-	if(big === '€0'){return '€0.00'}
-	return big.slice(0,big.length-2) + '.' + big.slice(big.length-2);
-};
-
-export default {
-	develop,
-	initObjectIterators,
-	formElement,
-	FEValue,
-	selectElement,
-	imageElement
+export const asCurrency = (number: number, canBeFree = false): string => {
+	const big = `${Math.ceil(number * 100 )}`;
+	if(big === '0'){ return canBeFree? 'gratis' : '€0.00' }
+	if(big.length === 1){ return `€0.0${big}`}
+	if(big.length === 2){ return `€0.${big}`}
+	return '€' + big.slice(0,big.length-2) + '.' + big.slice(big.length-2);
 };

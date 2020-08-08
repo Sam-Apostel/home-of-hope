@@ -2,7 +2,7 @@ export class ImageTile extends HTMLElement {
     public constructor() {
         super();
         this.attachShadow({mode: 'open'});
-    };
+    }
 
     public static makeTile = (url: string): ImageTile => {
         const tile = new ImageTile();
@@ -32,7 +32,7 @@ export class ImageTile extends HTMLElement {
         `;
         tile.shadowRoot.appendChild(style);
         return tile;
-    };
+    }
 }
 
 window.customElements.define('image-tile', ImageTile);

@@ -7,17 +7,18 @@ export class TabView extends HTMLElement {
     private navItems: Record<string, NavItem> = {};
     private contentItems: Record<string, ContentItem> = {};
     private header: HTMLElement;
+    private selected: NavItem;
 
     public constructor() {
         super();
         this._root = this.attachShadow({mode: 'open'});
-    };
+    }
 
     public static makeView = (header: HTMLElement, items: Array<Record<string, string>>): TabView => {
         const view = new TabView();
         view.build(header, items);
         return view;
-    };
+    }
 
     private build = (header: HTMLElement, items: Array<Record<string, string>>): void => {
         this.header = header;
@@ -26,17 +27,16 @@ export class TabView extends HTMLElement {
             this.navItems[item.id] = this.contentItems[item.id].navItem;
         });
         this.buildNav();
-        this.buildContent();
         this.attachMarkup();
 
         const urlAttr = location.hash.substr(1);
         if(urlAttr !== ''){
             const urlSections = urlAttr.split('?');
-            this.navItems[urlSections[0]].select(urlSections[1]);
+            this.select(this.navItems[urlSections[0]], urlSections[1]);
         }else {
-            this.navItems[items[4].id].select();
+            this.select(this.navItems[items[4].id]);
         }
-    };
+    }
 
     private buildNav = (): void => {
         const nav = document.createElement('nav');
@@ -46,28 +46,33 @@ export class TabView extends HTMLElement {
         Object.values(this.navItems).forEach((navItem: NavItem) => {
             nav.appendChild(navItem);
             navItem.addEventListener('click',()=>{
-                this.deselect();
-                navItem.select();
+                this.select(navItem);
             } );
         });
         const navFooter = document.createElement('div');
         navFooter.innerHTML = '<div>© Kim-Sophie Chaidron 2020</div>';
         nav.appendChild(navFooter);
         this._root.appendChild(nav);
-    };
-
-    private buildContent = (): void => {
-        Object.values(this.contentItems).forEach((contentItem: ContentItem) => this._root.appendChild(contentItem));
-    };
+    }
 
     private attachMarkup = (): void => {
         const styleElement = document.createElement('style');
         styleElement.innerHTML = style;
         this._root.appendChild(styleElement)
-    };
+    }
+
+    public select = (navItem: NavItem, urlGetAttr = ''): void => {
+        this.deselect();
+        this.selected = navItem;
+        navItem.select(urlGetAttr);
+        this.shadowRoot.appendChild(navItem.contentItem);
+    }
 
     public deselect = (): void => {
-        Object.values(this.navItems).forEach( (navItem: NavItem) => navItem.deselect());
+        if(this.selected) {
+            this.selected.deselect();
+            this.shadowRoot.removeChild(this.selected.contentItem);
+        }
     }
 }
 
