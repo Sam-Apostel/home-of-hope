@@ -1,6 +1,7 @@
 import style from './style.scss';
 import {
     InstagramFeed, NavItem, ShopTile} from './../components';
+import {ReviewTile} from "../ReviewTile/ReviewTile";
 
 export class ContentItem extends HTMLElement {
     private _nav: Record<string, string>;
@@ -38,7 +39,7 @@ export class ContentItem extends HTMLElement {
         });
 
         title.innerText = 'Schrijfsel van een aspie in lockdown';
-        body.appendChild(document.createTextNode('Mensen die lijden aan het syndroom van Asperger, of aan een vorm van autisme in het algemeen, hebben erg veel nood aan structuur. Deze structuur kan zich op verscheidene manieren aanbieden. Zo kunnen ze uitblinken in het maken van Samenvattingen, van PowerPoints, en kortom van alles wat met structuur in een opleiding te maken heeft.'));
+        body.appendChild(document.createTextNode('Mensen die lijden aan het syndroom van Asperger, of aan een vorm van autisme in het algemeen, hebben erg veel nood aan structuur. Deze structuur kan zich op verscheidene manieren aanbieden. Zo kunnen ze uitblinken in het maken van samenvattingen, van PowerPoints, en kortom van alles wat met structuur in een opleiding te maken heeft.'));
         body.appendChild(document.createElement('br'));
 
         body.appendChild(document.createElement('br'));
@@ -46,7 +47,7 @@ export class ContentItem extends HTMLElement {
         body.appendChild(document.createElement('br'));
         body.appendChild(blockQuotes[1]);
         body.appendChild(document.createElement('br'));
-        body.appendChild(document.createTextNode('Wat zou je doen als een erg virus plots de hele wereld, alsook de jouwe, op zijn kop zet? Wat zou je doen als daardoor plots de structuur - die net zo belangrijk voor jou is - volledig in stukjes breekt? Wat zou je doen als er van de ene op de andere dag plots aan structuur ontbreekt? Ga je je leven On hold zetten en hopen dat deze bui gauw overwaait? Of ga je zelf uit deze oneindig lijkende kuil proberen te klauteren en het heft in eigen handen nemen?'));
+        body.appendChild(document.createTextNode('Wat zou je doen als een erg virus plots de hele wereld, alsook de jouwe, op zijn kop zet? Wat zou je doen als daardoor plots de structuur - die net zo belangrijk voor jou is - volledig in stukjes breekt? Wat zou je doen als er van de ene op de andere dag plots aan structuur ontbreekt? Ga je je leven on hold zetten en hopen dat deze bui gauw overwaait? Of ga je zelf uit deze oneindig lijkende kuil proberen te klauteren en het heft in eigen handen nemen?'));
         body.appendChild(document.createElement('br'));
         body.appendChild(document.createElement('br'));
         body.appendChild(document.createTextNode('Het kan vreselijk eng zijn om plots niet meer elke dag naar een schoolinstelling of naar je werk te hoeven gaan. Het kan vreselijk eng zijn om niet meer dagdagelijks dat bekende gezicht van je vriend(in), leerkracht of collega te zien. Uiteindelijk is het voor ons eigen goed, uit dat idee put je moed. Je probeert als aspie zo goed als mogelijk zelf je leven inrichting en structuur te geven. Je probeert zo goed als mogelijk in te spelen op deze veranderde omstandigheden. Je probeert elke dag weer zo goed als mogelijk te leven met autisme in lockdown.'));
@@ -156,6 +157,25 @@ export class ContentItem extends HTMLElement {
         return ShopTile.MakeTile(source);
     }
 
+    private _getReviewContent = (): ReviewTile => {
+        const reviews = [
+            {
+                name: 'Sam Apostel',
+                rating: 5,
+                review: 'Hele mooie hoge kwaliteit kaartjes'
+            },{
+                name: 'Sam Apostel',
+                rating: 5,
+                review: 'Hele mooie hoge kwaliteit kaartjes'
+            },{
+                name: 'Sam Apostel',
+                rating: 5,
+                review: 'Hele mooie hoge kwaliteit kaartjes'
+            }
+        ];
+        return ReviewTile.MakeTile(reviews);
+    }
+
     public constructor() {
         super();
         this._root = this.attachShadow({mode: 'open'});
@@ -186,6 +206,7 @@ export class ContentItem extends HTMLElement {
             this.addContent(this._getArtContent());
         }else if(id === 'Webshop' ){
             this.addContent(this._getShopContent());
+            this.addContent(this._getReviewContent());
         }else if(id === 'Home'){
             this.addContent(this._getHomeContent());
         }
