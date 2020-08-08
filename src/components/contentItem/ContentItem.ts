@@ -89,31 +89,31 @@ export class ContentItem extends HTMLElement {
                             name: 'Dankbaar',
                             images: ['dankbaar'],
                             price: 1.40,
-                            description: ''
+                            description: 'Deze wenskaart schreef ik voor mijn vriendje, die de wereld voor mij interpreteert.'
                         },{
                             id: 1,
                             name: 'Van jou',
                             images: ['vanjou'],
                             price: 1.40,
-                            description: ''
+                            description: 'Deze wenskaart schreef ik voor al de verliefde stelletjes.'
                         },{
                             id: 2,
                             name: 'Thuis',
                             images: ['thuis'],
                             price: 1.40,
-                            description: ''
+                            description: 'Want liefde voelt als thuiskomen, wanneer je de juiste persoon vindt.'
                         },{
                             id: 3,
                             name: 'Wolf',
                             images: ['wolf'],
                             price: 1.40,
-                            description: ''
+                            description: 'Deze wenskaart geeft steun en motivatie aan sterke personen.'
                         },{
                             id: 4,
                             name: 'Honing & vanille',
                             images: ['honingenvanille'],
                             price: 1.40,
-                            description: ''
+                            description: 'Liefde is zo zoet als honing en vanille. Voor mij is hij dat ook.'
                         }/*,{
                             id: 5,
                             name: 'Wenskaarten bundel',
@@ -147,7 +147,7 @@ export class ContentItem extends HTMLElement {
                             name: 'Puzzle Pieces',
                             images: ['puzzlepieces'],
                             price: 19.99,
-                            description: ''
+                            description: 'Deze gedichtenbundel is de vrucht van mijn bestaan. Ik pende mijn gevoelens en gedachten neer voor al wie zich in mijn woorden kan vinden. Voor mijn vriend, mijn gezin en voor mijzelf.'
                         }
                     ]
                 }

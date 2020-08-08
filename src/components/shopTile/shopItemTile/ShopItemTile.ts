@@ -28,7 +28,7 @@ export class ShopItemTile extends HTMLElement{
 		const styleElement = document.createElement('style');
 		styleElement.innerHTML = style;
 
-		[image, title, price, description, orderButton, styleElement].forEach(c => tile.shadowRoot.appendChild(c));
+		[image, description, title, price, orderButton, styleElement].forEach(c => tile.shadowRoot.appendChild(c));
 		return tile;
 	}
 }
