@@ -4,10 +4,10 @@
 	border-bottom-left-radius: 0;
 	display: grid;
 	height: 100%;
-	overflow-y:scroll;
+	overflow-y:auto;
 	overflow-x: hidden;
 	grid-template-columns: 1fr 300px minmax(200px, 430px) 200px 1fr;
-	grid-template-rows: 1fr auto auto auto auto auto 1fr;
+	grid-template-rows: 1fr auto auto auto auto auto auto 1fr;
 	padding: 7.5px;
 	grid-gap: 7.5px;
 	grid-template-areas:
@@ -15,23 +15,29 @@
 		". . . close ."
 		". items shipping shipping ."
 		". items totals totals ."
+		". items terms terms ."
 		". items pay pay ."
 		". items . . ."
 		". . . . .";
 }
-@media (max-width: 870px) {
+@media (max-width: 895px) {
 	:host {
 		grid-template-columns: 1fr auto 1fr;
-		grid-template-rows: auto auto auto auto auto 1fr;
+		grid-template-rows: auto auto auto auto auto auto 1fr;
 		grid-template-areas:
 			". close ."
 			". items ."
 			". shipping ."
 			". totals ."
+			". terms ."
 			". pay ."
 			". . .";
 	}
 
+}
+.terms{
+	grid-area: terms;
+	margin-top: 2rem;
 }
 button{
 	cursor: pointer;
@@ -49,14 +55,14 @@ button{
 }
 
 .shipping{
-
 	grid-area: shipping;
 	display: grid;
 	grid-template-areas:
 		"fName fName lName lName"
 		"email email email email"
 		"country city city  postal"
-		"street street number bus";
+		"street street number bus"
+		"comments comments comments comments";
 	grid-gap: 7.5px;
 	grid-template-columns: 150px 1fr 1fr 150px;
 	[for="given-name"]{
@@ -86,11 +92,22 @@ button{
 	[for="ship-bus"]{
 		grid-area: bus;
 	};
+	.comments{
+		grid-area: comments;
+		& textarea{
+			display: block;
+			overflow-y: auto;
+			height: 4.7rem;
+			resize: vertical;
+		}
+	}
 	label{
 		line-height: 1.5rem;
 		text-indent: .2rem;
+		white-space: nowrap;
 	}
-	input, select{
+	input, select, textarea{
+		display: block;
 		appearance: none;
 		box-sizing: border-box;
 		width: 100%;
@@ -102,12 +119,14 @@ button{
 		padding: .1rem .5rem;
 		font-size: 1rem;
 	}
+
 }
 
 .totals{
 	grid-area: totals;
 	display: flex;
 	flex-direction: column;
+	margin-top: 2rem;
 	.row {
 		padding: 0 5px;
 		display: flex;

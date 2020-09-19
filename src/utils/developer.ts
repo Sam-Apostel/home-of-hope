@@ -1,4 +1,4 @@
-export const develop = (type: string, classNames: string, content: Array<HTMLElement|string|number|Array<HTMLElement|string|number>>|HTMLElement|string|number = [], attr: Record<string, string> = {}): HTMLElement => {
+export const develop = (type: string, classNames: string, content: Array<HTMLElement|string|number|Array<HTMLElement|string|number>>|HTMLElement|string|number|Node|Node[] = [], attr: Record<string, string> = {}): HTMLElement => {
 	const elem = document.createElement(type);
 	classNames.split(' ').filter(className => className !== '').forEach(className => elem.classList.add(className));
 
@@ -56,9 +56,9 @@ export const formElement = (type: string, name: string, classNames: string, extr
 
 export const imageElement = (classNames: string, src: string, alt: string, sizes: Array<string>, formats: Array<string>): HTMLPictureElement => {
 	const sources = formats.map(format =>
-		develop('srcset', '', [], {srcset: sizes.reduce((acc, size) => acc + `https://tigrr.b-cdn.net/images/${size}/${format}/src.${format} ${size}w `, ''), type:  `image/${format}`})
+		develop('srcset', '', [], {srcset: sizes.reduce((acc, size) => acc + `https://tigrr.b-cdn.net/images/${size}/${format}/${src}.${format} ${size}w `, ''), type:  `image/${format}`})
 	);
-	const img = develop('img', classNames,[], {src: `https://tigrr.b-cdn.net/images/${sizes[0]}/${formats[1]}/${src}.${formats[1]}`, alt});
+	const img = develop('img', classNames,[], {src: `https://tigrr.b-cdn.net/images/${sizes[0]}/${formats[1%formats.length]}/${src}.${formats[1%formats.length]}`, alt});
 	return develop('picture', '', [sources, img]);
 };
 

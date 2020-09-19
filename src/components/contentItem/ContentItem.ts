@@ -2,6 +2,7 @@ import style from './style.scss';
 import {
     InstagramFeed, NavItem, ShopTile} from './../components';
 import {ReviewTile} from "../ReviewTile/ReviewTile";
+import {ModalTile} from "../ModalTile/ModalTile";
 
 export class ContentItem extends HTMLElement {
     private _nav: Record<string, string>;
@@ -88,33 +89,40 @@ export class ContentItem extends HTMLElement {
                         {
                             id: 0,
                             name: 'Dankbaar',
-                            images: ['dankbaar'],
-                            price: 1.40,
+                            images: ['dankbaar', 'dankbaar'],
+                            price: 1.45,
                             description: 'Deze wenskaart schreef ik voor mijn vriendje, die de wereld voor mij interpreteert.'
                         },{
                             id: 1,
                             name: 'Van jou',
-                            images: ['vanjou'],
-                            price: 1.40,
+                            images: ['vanjou', 'vanjou'],
+                            price: 1.45,
                             description: 'Deze wenskaart schreef ik voor al de verliefde stelletjes.'
                         },{
                             id: 2,
                             name: 'Thuis',
-                            images: ['thuis'],
-                            price: 1.40,
+                            images: ['thuis', 'thuis'],
+                            price: 1.45,
                             description: 'Want liefde voelt als thuiskomen, wanneer je de juiste persoon vindt.'
                         },{
                             id: 3,
                             name: 'Wolf',
-                            images: ['wolf'],
-                            price: 1.40,
+                            images: ['wolf', 'wolf'],
+                            price: 1.45,
                             description: 'Deze wenskaart geeft steun en motivatie aan sterke personen.'
                         },{
                             id: 4,
                             name: 'Honing & vanille',
-                            images: ['honingenvanille'],
-                            price: 1.40,
+                            images: ['honingenvanille', 'honingenvanille'],
+                            price: 1.45,
                             description: 'Liefde is zo zoet als honing en vanille. Voor mij is hij dat ook.'
+                        },{
+                            id: 5,
+                            name: 'Kaartje op aanvraag',
+                            images: ['mama', 'mama'],
+                            price: 1.65,
+                            description: 'Wil je een ander gedichtje van mij op een kaartje? Vertel me welk gedicht en ik ontwerp het speciaal voor jou!',
+                            custom: true
                         }/*,{
                             id: 5,
                             name: 'Wenskaarten bundel',
@@ -181,9 +189,9 @@ export class ContentItem extends HTMLElement {
         this._root = this.attachShadow({mode: 'open'});
     }
 
-    public static makeItem = (id: string, icon: string): ContentItem => {
+    public static makeItem = (id: string, icon: string, path: string): ContentItem => {
         const contentItem = new ContentItem();
-        contentItem._nav = {icon, id};
+        contentItem._nav = {icon, id, path};
         contentItem._build(id);
         return contentItem;
     }
@@ -206,7 +214,11 @@ export class ContentItem extends HTMLElement {
             this.addContent(this._getArtContent());
         }else if(id === 'Webshop' ){
             this.addContent(this._getShopContent());
-            this.addContent(this._getReviewContent());
+         //   this.addContent(this._getReviewContent());
+            const modal = ModalTile.MakeTile()
+            this.addContent(modal);
+            this.addEventListener('openModal', (e: CustomEvent) => modal.open(e.detail));
+            this.addEventListener('closeModal', () => modal.close());
         }else if(id === 'Home'){
             this.addContent(this._getHomeContent());
         }
@@ -218,14 +230,6 @@ export class ContentItem extends HTMLElement {
 
     public addContent = (content: HTMLElement): void => {
         this._root.appendChild(content);
-    }
-
-    public deselect = (): void => {
-        this.classList.remove('selected');
-    }
-
-    public select = (): void => {
-        this.classList.add('selected');
     }
 
 }

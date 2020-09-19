@@ -4,6 +4,7 @@ import { ContentItem } from "../contentItem/ContentItem";
 
 export class NavItem extends HTMLElement {
     public contentItem: ContentItem;
+    public path: string;
 
     static get observedAttributes(): Array<string>{
         return ['class'];
@@ -23,6 +24,7 @@ export class NavItem extends HTMLElement {
 
     private build = (): void => {
         this.buildTemplate(this.contentItem.nav.id, this.contentItem.nav.icon);
+        this.path = this.contentItem.nav.path;
         this.attachMarkup();
     };
 
@@ -40,16 +42,10 @@ export class NavItem extends HTMLElement {
 
     public deselect = (): void => {
         this.classList.remove('selected');
-        this.contentItem.deselect();
     }
 
-    public select = (getAttr: string | undefined = ''): void => {
+    public select = (): void => {
         this.classList.add('selected');
-        //dispatch('select', this.contentItem);
-
-        this.contentItem.select();
-        const pathEnd = getAttr !== '' ? '?' + getAttr : '';
-        window.history.pushState({}, this.contentItem.nav.id + ' - Home of Hope', location.origin + location.pathname + '#' + this.contentItem.nav.id + pathEnd);
     }
 
     attributeChangedCallback(name: string, oldValue: string, newValue: string): void {

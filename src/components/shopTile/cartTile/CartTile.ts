@@ -31,6 +31,7 @@ export class CartTile extends HTMLElement {
 			bus?: string;
 		};
 	};
+	private comments: string;
 
 
 	connectedCallback(): void {
@@ -52,6 +53,7 @@ export class CartTile extends HTMLElement {
 		}
 
 		const savedShipping = JSON.parse(localStorage.getItem('shipping'));
+		const savedComments = JSON.parse(localStorage.getItem('comments'));
 		this.shipping = {
 			name: {},
 			address: {
@@ -59,6 +61,7 @@ export class CartTile extends HTMLElement {
 			}
 		}
 		this.shipping = {...this.shipping, ...savedShipping};
+		this.comments = savedComments
 
 		this.update();
 	}
@@ -210,7 +213,13 @@ export class CartTile extends HTMLElement {
 		const number = formElement('text', 'ship-number', '', {label: 'nummer *', autocomplete: 'shipping street-number', value: this.shipping.address.number}, (v=>this.shipping.address.number = v));
 		const bus = formElement('text', 'ship-bus', '', {label: 'bus', autocomplete: 'shipping street-bus', value: this.shipping.address.bus}, (v=>this.shipping.address.bus = v));
 
-		const shippingForm = develop('form', 'shipping', [firstName, lastName, email, country, city, postal, street, number, bus] );
+		const commentsInput = develop('textarea', '', [],{name: 'comments', placeholder: 'Vermeld hier zeker je gewenste gedichtje indien je een kaartje op aanvraag besteld.'});
+		commentsInput.addEventListener('change', ()=>{
+			(v => this.comments = v)((commentsInput as HTMLTextAreaElement).value);
+		});
+		const commentsField = develop('label', 'comments', ['opmerkingen', commentsInput], {for: 'comments'}) as HTMLLabelElement;
+
+		const shippingForm = develop('form', 'shipping', [firstName, lastName, email, country, city, postal, street, number, bus, commentsField] );
 		this.shadowRoot.appendChild(shippingForm);
 		const hasBook = Array.from(this.items.entries()).some(([{category}, {amount}]) => category === 1 && amount > 0 );
 		const hasCard = Array.from(this.items.entries()).some(([{category}, {amount}]) => category === 0 && amount > 0 );
@@ -218,8 +227,8 @@ export class CartTile extends HTMLElement {
 			return (
 				this.shipping.address.country === 'NL' && (
 					(!hasBook &&  hasCard && 2.28) ||
-					( hasBook && !hasCard && 0) ||
-					( hasBook &&  hasCard  && 0)
+					( hasBook && !hasCard && 2) ||
+					( hasBook &&  hasCard  && 2)
 				) ||
 				this.shipping.address.country === 'BE' && (
 					(!hasBook &&  hasCard && 1.71) ||
@@ -228,7 +237,7 @@ export class CartTile extends HTMLElement {
 				) ||
 				this.shipping.address.country === 'DE' && (
 					(!hasBook &&  hasCard && 2.28) ||
-					( hasCard &&  hasBook && 2.28) ||
+					( hasCard && !hasBook && 2.28) ||
 					( hasBook &&  hasCard && 0)
 				)
 			);
@@ -261,12 +270,18 @@ export class CartTile extends HTMLElement {
 			shippingCostValue.innerText = asCurrency(price.shipping, true);
 			totalCostValue.innerText = asCurrency(price.total);
 		});
+		const terms = develop('span', 'terms', [
+			'Wanneer u dit formulier verzend gaat u akkoord met de ',
+			develop('a', '', 'Terms and conditions', {href: './legal/termsandconditions', target: '_blank'}),
+		]);
+		this.shadowRoot.appendChild(terms);
 
 		const orderButton = develop('button', 'pay', 'verder naar betaling', { disabled: 'true' });
-
 		this.shadowRoot.appendChild(orderButton);
 		orderButton.addEventListener('click', (e) => {
 			e.stopPropagation();
+			(orderButton as HTMLButtonElement).disabled = true;
+			orderButton.innerHTML = '<i class="gg-spinner-alt"></i>';
 
 			const order = Array.from(this.items.entries())
 				.map(([ {category, item}, { amount }]) => ({item: this.source.categories[category].items[item], amount}))
@@ -286,17 +301,23 @@ export class CartTile extends HTMLElement {
 				country: this.shipping.address.country
 			};
 			const shipping = price.shipping;
-
-
+			const comments = this.comments;
 
 			api.newOrder(
-				{order, address, shipping},
+				{order, address, shipping, comments},
 				response => {
 					if(response?.id) localStorage.setItem('orderId', response.id);
-					if(response?._links?.checkout?.href)
+					if(response?._links?.checkout?.href) {
+						(orderButton as HTMLButtonElement).disabled = false;
+						orderButton.innerText = 'verder naar betaling';
 						window.location = response?._links?.checkout?.href;
-					else throw response;
-
+					} else throw response;
+				},
+				error => {
+					alert('Spijtig genoeg is er iets misgegaan bij het aanmaken van de betaling, we lossen het zo snel mogelijk op en laten je iets weten als het probleem van de baan is.');
+					api.log({endpoint: 'newOrder', error, initialData: {order, address, shipping, comments}});
+					(orderButton as HTMLButtonElement).disabled = false;
+					orderButton.innerText = 'verder naar betaling';
 				}
 			);
 

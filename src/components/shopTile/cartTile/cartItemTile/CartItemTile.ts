@@ -39,7 +39,7 @@ export class CartItemTile extends HTMLElement {
 		const product = this.source;
 		const imgElem = imageElement('image', product.images[0], product.name, ['420' /* TODO: optimise for 40px */], ['webp', 'jpg']);
 		const nameElem = develop('span', 'name', product.name ?? '');
-		const amountInput = develop('input', 'amount', [], {type: 'text'/* TODO: change this to number for mobile users */, value: this.amount.toString()});
+		const amountInput = develop('input', 'amount', [], {type: 'number', value: this.amount.toString()});
 		const subtractButton = develop('button', 'subtract', '-');
 		const removeButton = develop('button', 'remove', FontAwesomeIcon.makeIcon('trash'));
 		if(this.amount === 0){

@@ -1,22 +1,17 @@
-*{
-    font-family: amiri, serif
+:host{
+    height: unset;
 }
 
-cart-tile {
-    position: fixed;
-    right: 0;
-    top: 0;
+*{
+    font-family: amiri, serif
 }
 .container {
     text-align: center;
 
-    h2{
+    h2 {
         font-family: Lato, sans-serif;
         color: rgba(83, 83, 83, 0.44);
     }
-    &:first-of-type{
-         margin-top: 70px;
-     }
 }
 @media (max-width: 430px){
     .container{
@@ -26,12 +21,4 @@ cart-tile {
     }
 }
 
-@media (max-width: 380px){
-    .container{
-        shop-item-tile{
-            width: calc(100vw - 60px - 20px);
-            height: calc((100vw - 60px - 20px) / 3 * 4.2);
-        }
-    }
-}
 

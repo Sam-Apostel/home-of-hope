@@ -2,6 +2,7 @@ nav{
   background-color: #37c5cc;
   position: fixed;
   left:0;
+  top: 0;
   height: 100%;
   float: left;
   width: 170px;
@@ -17,17 +18,20 @@ nav > .header{
     font-family: Nella Sue, serif;
 }
 
-nav > div{
-  position: absolute;
-  bottom: 0;
-  width: 170px;
-  padding: 1rem;
-  box-sizing: border-box;
-  color: #464246;
-}
-nav > div > div{
-  font-size: 10px;
-  text-align: center;
+.body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    left: 170px;
+    right: 0;
+    position: absolute;
+    top: 0;
+    &  content-item{
+      flex: 1 0 auto;
+    }
+    & footer-tile {
+      flex-shrink: 0;
+    }
 }
 
 @media (max-width: 500px){
@@ -41,8 +45,8 @@ nav > div > div{
     nav > .header{
         display: none;
     }
-    nav > div{
-        display: none;
+    .body{
+      left: 60px;
     }
 }
 
@@ -55,9 +59,6 @@ nav > div > div{
         flex-direction: column;
     }
     nav > .header{
-        display: none;
-    }
-    nav > div{
         display: none;
     }
 }

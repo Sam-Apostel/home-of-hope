@@ -1,0 +1,102 @@
+:host{
+    display: none;
+    left:170px;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    position: fixed;
+    z-index: 90;
+}
+
+:host(.open){
+    display: block;
+}
+
+@media (max-width: 500px), (max-height: 490px) {
+    :host {
+        left: 60px;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+}
+
+*{
+    font-family: amiri, serif
+}
+.container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .5);
+    backdrop-filter: blur(5px);
+    padding: 100px;
+    box-sizing: border-box;
+}
+
+.shopItemModal{
+    background-color: #daedee;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 12px;
+    display: inline-grid;
+    grid-template-rows: 4rem auto 2rem 5rem;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "image title"
+        "image description"
+        "image price"
+        "image buy";
+    .itemImage{
+        background-color: white;
+        display: block;
+        grid-area: image;
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+    }
+    .itemTitle{
+        grid-area: title;
+        padding: 1rem;
+        text-align: center;
+    }
+    .price{
+        grid-area: price;
+        padding: 1rem;
+    }
+    .orderButton{
+        grid-area: buy;
+        cursor: pointer;
+        bottom: 0;
+        width: calc(100% - 28px);
+        margin: 14px;
+        border-radius: 12px;
+        height: 50px;
+        border: none;
+        background: rgba(144, 111, 153, .7);
+        color: #e7e7e7;
+        font-size: 1.2rem;
+        font-weight: 600;
+        transition: .2s;
+
+        &:hover {
+            background: rgba(108, 95, 147, .8);
+            box-shadow: 2px 2px 25px rgba(255, 255, 255, .8);
+            transform-origin: center top;
+            transform: scale(1.01);
+        }
+
+        &:active {
+            cursor: grabbing;
+            box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.2);
+        }
+    }
+    .itemDescription{
+        grid-area: description;
+        padding: 1rem;
+        font-size: 1.2rem;
+    }
+}

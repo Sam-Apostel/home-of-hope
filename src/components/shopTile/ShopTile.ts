@@ -22,18 +22,27 @@ export class ShopTile extends HTMLElement{
     }
     private cart;
 
+    private addToCartListener = (
+        ((e: CustomEvent) => {
+            this.cart.add(e.detail.id, 1);
+        }) as EventListener
+    );
+
     connectedCallback(): void{
         const urlAttr = location.hash.substr(1);
         if(urlAttr !== '') {
             const urlSections = urlAttr.split('?');
             if(urlSections[1]){
-                if(urlSections[1].indexOf('redirect=payment') >= 0){
+                if(urlSections[1].indexOf('redirect=payment') >= 0 && localStorage.getItem('orderId')){
                     api.orderStatus(
                         {orderId: localStorage.getItem('orderId')},
                         res => {
                             if(res.status === 'paid'){
+                                alert('betaling van order ' + localStorage.getItem('orderId') + ' was successvol.')
                                 this.cart.empty();
+                                localStorage.clear();
                             }else{
+                                alert('betaling van order ' + localStorage.getItem('orderId') + ' is niet gelukt.')
                                 throw res;
                             }
                         }
@@ -42,6 +51,11 @@ export class ShopTile extends HTMLElement{
             }
         }
 
+        this.addEventListener('addToCart', this.addToCartListener);
+    }
+
+    disconnectedCallback(): void {
+        this.removeEventListener('addToCart', this.addToCartListener);
     }
 
     public static MakeTile = (source: ShopSourceInterface): ShopTile => {
@@ -50,9 +64,7 @@ export class ShopTile extends HTMLElement{
 
         const categories = source.categories.filter(c=>c.items.length).map(category => {
             const items = (category.items as Array<ShopSourceItemInterface>).map( item =>
-                ShopItemTile.MakeTile(item,(): void => {
-                    tile.cart.add({category: category.id, item: item.id}, 1);
-                })
+                ShopItemTile.MakeTile(item,{category: category.id, item: item.id})
             );
             const itemContainer = develop('div', `itemContainer ${category.name}`, items);
             const title = develop('h2', 'categoryTitle', category.name);

@@ -23,7 +23,7 @@ export class ReviewItemTile extends HTMLElement{
 		const styleElement = document.createElement('style');
 		styleElement.innerHTML = style;
 
-		[review, title, styleElement].forEach(c => tile.shadowRoot.appendChild(c));
+		[title, review, styleElement].forEach(c => tile.shadowRoot.appendChild(c));
 		return tile;
 	}
 }

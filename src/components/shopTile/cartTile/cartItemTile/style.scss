@@ -33,7 +33,14 @@
 			border: none;
 			border-radius: 5px;
 			padding: 0;
-			margin-left: 3px
+			margin-left: 3px;
+			&::-webkit-outer-spin-button,
+			&::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
+			-moz-appearance: textfield;
+
 		}
 
 		button{

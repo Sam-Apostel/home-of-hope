@@ -1,13 +1,13 @@
 import endpoints from './endpoints';
-import log from '../utils/logger';
+//import log from '../utils/logger';
 
 const endpointToApiCall = (api, [name, endpoint] ) => {
-	api[name] = (postData = {}, then = (res) => {if(!res) throw res}) => {
+	api[name] = (postData = {}, then = (res) => {if(!res) throw res}, fallback) => {
 		const formData = new FormData();
 		Object.entries(postData).forEach( ([key, value]) => {
 			formData.append(key, JSON.stringify(value));
 		});
-
+		if(!fallback){ fallback = (e) => {console.log(e)};}
 		fetch(endpoint, {
 			method: 'POST',
 			headers: {
@@ -17,9 +17,13 @@ const endpointToApiCall = (api, [name, endpoint] ) => {
 		})
 			.then(res=>res.json())
 			.then(then)
-			.catch(response => {
-				log.error({ endpoint, response, ...postData});
-			});
+			.catch(fallback)
+
+
+
+				/*() => {
+				//log.error({ endpoint, response, ...postData});
+			});*/
 	}
 	return api;
 };

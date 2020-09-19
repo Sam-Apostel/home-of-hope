@@ -6,7 +6,8 @@ const patterns = [
     { from: 'src/fonts', to: './fonts' },
     { from: 'src/images', to: './images' },
     { from: 'src/favicon.ico', to: '.' },
-    { from: 'src/.htaccess', to: '.' }
+    { from: 'src/.htaccess', to: '.' },
+    { from: 'src/legal', to: './legal'}
 ];
 
 module.exports = {

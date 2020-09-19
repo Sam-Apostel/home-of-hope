@@ -13,12 +13,10 @@ h2, h3{
 
 
 :host{
-  min-height: 100vh;
   position: relative;
   vertical-align: top;
-  width: calc(100% - 170px);
+  width: 100%;
   overflow-y: auto;
-  left: 170px;
   display: block;
 }
 p{
@@ -52,10 +50,7 @@ img{
 }
 
 @media (max-width: 500px), (max-height: 490px){
-  :host{
-    width: calc(100% - 60px);
-    left: 60px;
-  }
+
   :host > div {
     padding: 10px;
   }
