@@ -1,6 +1,6 @@
 import style from './style.scss';
 import { CartTile } from './cartTile/CartTile';
-import { ShopItemTile, ShopSourceItemInterface } from './shopItemTile/shopItemTile';
+import { ShopItemTile, ShopSourceItemInterface } from './shopItemTile/ShopItemTile';
 import { develop } from '../../utils/developer';
 import api from '../../api/api';
 
