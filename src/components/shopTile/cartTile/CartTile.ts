@@ -23,7 +23,7 @@ export class CartTile extends HTMLElement {
 		};
 		email?: string;
 		address: {
-			country?: 'BE' | 'NL' | 'DE';
+			country?: 'BE' | 'NL' | 'FR';
 			city?: string;
 			postal?: string;
 			street?: string;
@@ -202,7 +202,7 @@ export class CartTile extends HTMLElement {
 		const firstName = formElement('text', 'given-name', '', {label: 'voornaam *', autocomplete: 'given-name', value: this.shipping.name.first}, (v=>this.shipping.name.first = v));
 		const lastName = formElement('text', 'family-name', '', {label: 'achternaam *', autocomplete: 'family-name', value: this.shipping.name.last}, (v=>this.shipping.name.last = v));
 		const email = formElement('text', 'email', '', {label: 'email adres *', autocomplete: 'email', value: this.shipping.email}, (v=>this.shipping.email = v));
-		const options = Object.entries({'BE': 'België', 'NL': 'Nederland', 'DE': 'Deutschland'} )
+		const options = Object.entries({'BE': 'België', 'NL': 'Nederland', 'FR': 'France'} )
 			.map( ([iso3166, label]) =>
 				new Option(label, iso3166)
 			);
@@ -227,18 +227,18 @@ export class CartTile extends HTMLElement {
 			return (
 				this.shipping.address.country === 'NL' && (
 					(!hasBook &&  hasCard && 2.28) ||
-					( hasBook && !hasCard && 2) ||
-					( hasBook &&  hasCard  && 2)
+					( hasBook && !hasCard && 9) ||
+					( hasBook &&  hasCard && 9)
 				) ||
 				this.shipping.address.country === 'BE' && (
 					(!hasBook &&  hasCard && 1.71) ||
-					( hasBook && !hasCard && 0) ||
-					( hasBook &&  hasCard && 0)
+					( hasBook && !hasCard && 5.9) ||
+					( hasBook &&  hasCard && 5.9)
 				) ||
-				this.shipping.address.country === 'DE' && (
+				this.shipping.address.country === 'FR' && (
 					(!hasBook &&  hasCard && 2.28) ||
-					( hasCard && !hasBook && 2.28) ||
-					( hasBook &&  hasCard && 0)
+					( hasBook && !hasCard && 13.5) ||
+					( hasBook &&  hasCard && 13.5)
 				)
 			);
 		}

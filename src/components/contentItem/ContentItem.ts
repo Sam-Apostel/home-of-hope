@@ -155,7 +155,7 @@ export class ContentItem extends HTMLElement {
                             id: 0,
                             name: 'Puzzle Pieces',
                             images: ['puzzlepieces'],
-                            price: 19.99,
+                            price: 12,
                             description: 'Deze gedichtenbundel is de vrucht van mijn bestaan. Ik pende mijn gevoelens en gedachten neer voor al wie zich in mijn woorden kan vinden. Voor mijn vriend, mijn gezin en voor mijzelf.'
                         }
                     ]
