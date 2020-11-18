@@ -3,10 +3,6 @@ import endpoints from './endpoints';
 
 const endpointToApiCall = (api, [name, endpoint] ) => {
 	api[name] = (postData = {}, then = (res) => {if(!res) throw res}, fallback, urlData = {}) => {
-		const formData = new FormData();
-		Object.entries(postData).forEach( ([key, value]) => {
-			formData.append(key, JSON.stringify(value));
-		});
 		if(!fallback) fallback = console.log;
 		const url = Object.entries(urlData).reduce( (url, [name, value]) => url.replace(`{${name}}`, value), endpoint);
 		fetch(url, {
@@ -14,7 +10,7 @@ const endpointToApiCall = (api, [name, endpoint] ) => {
 			headers: {
 				Accept: 'application/json'
 			},
-			body: formData
+			body: JSON.stringify(postData)
 		})
 			.then(res=>res.json())
 			.then(then)
