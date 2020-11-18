@@ -1,4 +1,11 @@
-const toCurrency = amount => ({ currency: 'EUR', value: amount.toFixed(2)});
+const toCurrency = amount => ({ currency: 'EUR', value: fix(amount)});
+const fix = val => {
+	const big = `${Math.ceil(val * 100 )}`;
+	if(big === '0') return '0.00';
+	if(big.length === 1) return `0.0${big}`;
+	if(big.length === 2) return `0.${big}`;
+	return big.slice(0,big.length-2) + '.' + big.slice(big.length-2);
+};
 
 const transformLine = ({ price, quantity, name }) => ({
 	type: 'physical',
