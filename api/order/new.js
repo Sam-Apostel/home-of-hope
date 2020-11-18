@@ -59,8 +59,8 @@ module.exports = async ({body}, res) => {
 	const { order, address, shipping, comments } = JSON.parse(body);
 	const total = (shipping || 0) + order.reduce((tot, { price, quantity}) => (tot + (price * quantity)),{});
 	const amount = toCurrency(total);
-	const lines = order.map(transformLine);
-	if (shipping) lines.append(transformShipping(shipping));
+	let lines = order.map(transformLine);
+	if (shipping) lines = [...lines, transformShipping(shipping)];
 	const billingAddress = transformAddress(address);
 	const orderNumber = Math.floor(Math.random() * 10000000); // TODO: create a better incremental id
 	const options = {
