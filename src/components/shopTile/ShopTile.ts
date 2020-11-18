@@ -45,7 +45,9 @@ export class ShopTile extends HTMLElement{
                                 alert('betaling van order ' + localStorage.getItem('orderId') + ' is niet gelukt.')
                                 throw res;
                             }
-                        }
+                        },
+                        undefined,
+                        {orderId: localStorage.getItem('orderId')},
                     );
                 }
             }
