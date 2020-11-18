@@ -48,11 +48,8 @@ const makeBody = ({ amount, orderNumber, lines, billingAddress, email, comments 
 module.exports = async ({body}, res) => {
 	const url = 'https://api.mollie.com/v2/orders';
 	const api_key = process.env.mollie;
-	await res.send(body);
-	/*
-	const { order, address, shipping, comments } = body;
 
-
+	const { order, address, shipping, comments } = JSON.parse(body);
 	const total = (shipping || 0) + order.reduce((tot, { price, quantity}) => (tot + (price * quantity)),{});
 	const amount = toCurrency(total);
 	const lines = order.map(transformLine);
@@ -69,6 +66,4 @@ module.exports = async ({body}, res) => {
 	};
 	const answer = await fetch(url, options);
 	await res.json(answer.json());
-
-	 */
 };
