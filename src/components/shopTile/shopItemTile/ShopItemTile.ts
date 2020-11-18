@@ -36,7 +36,7 @@ export class ShopItemTile extends HTMLElement{
 
 		const title = develop('h3', 'itemTitle', item.name);
 		const image = imageElement('itemImage', item.images[0], item.name, ['420'], ['webp', 'jpg']);
-		const imageAlt = develop('img','itemImage', [], {src:'https://tigrr.b-cdn.net/images/960/jpg/' + item.images[1%item.images.length] + '.jpg'});
+		const imageAlt = develop('img','itemImage', [], {src:'/images/960/jpg/' + item.images[1%item.images.length] + '.jpg'});
 		const price = develop('span', 'price', asCurrency(item.price));
 		const description = develop('p', 'itemDescription', item.description);
 		const orderButton = develop('button', 'orderButton', 'Voeg toe aan winkelmandje');

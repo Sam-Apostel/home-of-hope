@@ -72,7 +72,7 @@ export class ContentItem extends HTMLElement {
         const images = ['94551839_231033338111000_5024844542109548544_n.jpg', '94440204_245019886905126_6073471776774422528_n.jpg'];
         images.forEach(src => {
             const image = document.createElement('img');
-            image.src = `https://tigrr.b-cdn.net/images/${src}`;
+            image.src = `/images/${src}`;
             output.appendChild(image);
         });
         return output;
