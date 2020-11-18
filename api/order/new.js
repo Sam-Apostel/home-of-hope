@@ -51,7 +51,7 @@ module.exports = async ({body}, res) => {
 
 	const { order, address, shipping, comments } = body;
 
-	const total = (shipping ?? 0) + order.reduce((tot, { price, quantity}) => (tot + (price * quantity)),{});
+	const total = (shipping || 0) + order.reduce((tot, { price, quantity}) => (tot + (price * quantity)),{});
 	const amount = toCurrency(total);
 	const lines = order.map(transformLine);
 	if (shipping) lines.append(transformShipping(shipping));
