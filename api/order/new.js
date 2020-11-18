@@ -48,7 +48,7 @@ const makeBody = ({ amount, orderNumber, lines, billingAddress, email, comments 
 module.exports = async ({body}, res) => {
 	const url = 'https://api.mollie.com/v2/orders';
 	const api_key = process.env.mollie;
-
+	await res.send(body);
 	const { order, address, shipping, comments } = body;
 
 	const total = (shipping || 0) + order.reduce((tot, { price, quantity}) => (tot + (price * quantity)),{});
