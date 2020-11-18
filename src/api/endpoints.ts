@@ -1,4 +1,4 @@
-const API_ENDPOINT = 'https://hope.tigrr.be/api/'
+const API_ENDPOINT = `https://${process.env.VERCEL_URL}/api/`;
 
 export const newOrder = `${API_ENDPOINT}order/new`;
 export const orderStatus = `${API_ENDPOINT}order/{orderId}`;
