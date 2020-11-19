@@ -5,7 +5,9 @@
   "description": "Kim-Sophie's personal blog",
   "repository": "https://github.com/Sam-Apostel/home-of-hope",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@mollie/api-client": "^3.4.0"
+  },
   "scripts": {
     "start": "webpack-dev-server --open",
     "build": "rm -rf dist && webpack"

@@ -1,3 +1,6 @@
+import createMollieClient from '@mollie/api-client';
+const mollieClient = createMollieClient({ apiKey: process.env.mollie });
+
 const toCurrency = amount => ({ currency: 'EUR', value: fix(amount)});
 const fix = val => {
 	const big = `${Math.ceil(val * 100 )}`;
@@ -53,9 +56,6 @@ const makeBody = ({ amount, orderNumber, lines, billingAddress, email, comments 
 };
 
 module.exports = async ({body}, res) => {
-	const url = 'https://api.mollie.com/v2/orders';
-	const api_key = process.env.mollie;
-
 	const { order, address, shipping, comments } = JSON.parse(body);
 	const total = (shipping || 0) + order.reduce((tot, { price, quantity}) => (tot + (price * quantity)),{});
 	const amount = toCurrency(total);
@@ -63,14 +63,9 @@ module.exports = async ({body}, res) => {
 	if (shipping) lines = [...lines, transformShipping(shipping)];
 	const billingAddress = transformAddress(address);
 	const orderNumber = Math.floor(Math.random() * 10000000); // TODO: create a better incremental id
-	const options = {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			'Authorization': `Bearer ${api_key}`
-		},
-		body: JSON.stringify(makeBody({ amount, orderNumber, lines, billingAddress, email: address.email, comments }))
-	};
-	const answer = await fetch(url, options);
-	await res.json(answer.json());
+	const mollieOrder = await mollieClient.orders.create(
+		makeBody({ amount, orderNumber, lines, billingAddress, email: address.email, comments })
+	);
+
+	await res.json(mollieOrder);
 };
