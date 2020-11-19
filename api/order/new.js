@@ -62,7 +62,7 @@ module.exports = async ({body}, res) => {
 	let lines = order.map(transformLine);
 	if (shipping) lines = [...lines, transformShipping(shipping)];
 	const billingAddress = transformAddress(address);
-	const orderNumber = Math.floor(Math.random() * 10000000); // TODO: create a better incremental id
+	const orderNumber = `${Math.floor(Math.random() * 10000000)}`; // TODO: create a better incremental id
 	const mollieOrder = await mollieClient.orders.create(
 		makeBody({ amount, orderNumber, lines, billingAddress, email: address.email, comments })
 	);
