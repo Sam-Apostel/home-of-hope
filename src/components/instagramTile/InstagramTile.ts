@@ -7,7 +7,7 @@ export class ImageTile extends HTMLElement {
     public static makeTile = (url: string): ImageTile => {
         const tile = new ImageTile();
         const img = document.createElement('img');
-        img.src = url.replace('https://scontent-bru2-1.cdninstagram.com/', 'https://tigrrinsta.b-cdn.net/');
+        img.src = url;
         tile.shadowRoot.appendChild(img);
         const style = document.createElement('style');
         style.innerText = `

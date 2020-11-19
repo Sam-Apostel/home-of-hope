@@ -290,7 +290,7 @@ export class CartTile extends HTMLElement {
 					name: item.name,
 					quantity: amount,
 					price: item.price,
-					imageUrl: `https://tigrr.b-cdn.net/images/420/jpg/${item.images[0]}.jpg`
+					imageUrl: `/images/420/jpg/${item.images[0]}.jpg`
 				}));
 			const address = {
 				name: this.shipping.name,
