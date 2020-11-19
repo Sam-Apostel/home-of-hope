@@ -3,7 +3,6 @@ const mollieClient = createMollieClient({ apiKey: process.env.mollie });
 
 const toCurrency = amount => ({ currency: 'EUR', value: fix(amount)});
 const fix = val => {
-	console.log(val);
 	const big = `${Math.ceil(val * 100 )}`;
 	if(big === '0') return '0.00';
 	if(big.length === 1) return `0.0${big}`;
@@ -58,13 +57,12 @@ const makeBody = ({ amount, orderNumber, lines, billingAddress, email, comments 
 
 module.exports = async ({body}, res) => {
 	const { order, address, shipping, comments } = JSON.parse(body);
-	const total = (shipping || 0) + order.reduce((tot, { price, quantity}) => (tot + (price * quantity)),{});
+	const total =  order.reduce((tot, { price, quantity}) => (tot + (price * quantity)), (shipping || 0));
 	const amount = toCurrency(total);
 	let lines = order.map(transformLine);
 	if (shipping) lines = [...lines, transformShipping(shipping)];
 	const billingAddress = transformAddress(address);
 	const orderNumber = Math.floor(Math.random() * 10000000); // TODO: create a better incremental id
-	console.log(amount);
 	const mollieOrder = await mollieClient.orders.create(
 		makeBody({ amount, orderNumber, lines, billingAddress, email: address.email, comments })
 	);
