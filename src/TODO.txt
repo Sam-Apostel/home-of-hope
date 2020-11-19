@@ -2,6 +2,5 @@ TODO: replace parent callbacks to this.dispatchEvent(new CustomEvent('add', { de
 TODO: move more logic to connectedCallback and use disconnectedCallback
 TODO: message on payment success.
 TODO: status page
-TODO: form validation
 TODO: home of hope title on homepage
 TODO: product specs
